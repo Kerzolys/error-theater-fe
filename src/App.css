@@ -1,0 +1,8 @@
+#root {
+  max-width: 1440px;
+  inline-size: 100%;
+  margin: 0 auto;
+  /* padding-inline: 2rem; */
+  text-align: center;
+  /* min-block-size: 100vh; */
+}

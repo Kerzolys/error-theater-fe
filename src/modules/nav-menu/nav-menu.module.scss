@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-basis: 645px;
+  @media screen and (max-width: 1023px) {
+    flex-basis: unset;
+  }
+  &_vertical {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-xs);
+  }
+}
+
+.mobileMenu {
+  inline-size: 36px;
+  position: relative;
+  & svg {
+    display: block;
+    & path {
+      stroke: var(--font-main);
+    }
+  }
+  &:hover svg path {
+    stroke: var(--font-light);
+  }
+
+  &__content {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-light);
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &__closeButton {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      inline-size: 36px;
+      block-size: 36px;
+      & svg {
+        display: block;
+      }
+    }
+  }
+}

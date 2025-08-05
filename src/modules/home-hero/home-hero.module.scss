@@ -1,0 +1,7 @@
+.container {
+  min-height: calc(100vh - var(--header-height)); // ← вот ключевой момент
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--padding-l);
+}

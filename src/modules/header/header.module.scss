@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px var(--padding-s);
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  inline-size: 100%;
+  &__link {
+    font-size: var(--font-size-l);
+  }
+}

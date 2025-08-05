@@ -1,0 +1,9 @@
+.container {
+    background-color: #fff;
+    padding: var(--padding-s);
+    &__infoBlock {
+        display: flex;
+        justify-content: space-between;
+        margin-block-end: var(--padding-s);
+    }
+}
