@@ -9,9 +9,11 @@ export type TUser = {
 
 export type TProject = {
   id?: string;
-  images: TImage[];
-  videos: TVideo[];
+  images: string[];
+  videos: string[];
   description: string;
+  name: string;
+  mainImage: string;
 };
 
 export type TMember = {
@@ -36,6 +38,7 @@ export type TEvent = {
 export type TImage = {
   id?: string;
   link: string;
+  title?: string;
 };
 
 export type TVideo = {
@@ -49,3 +52,15 @@ export type TContact = {
   name: string;
   contact: string;
 };
+
+export interface ModalConfig {
+  content: React.ReactNode;
+}
+
+export type ModalTypes =
+  | "add"
+  | "edit"
+  | "delete"
+  | "addConfirmation"
+  | "deleteConfirmation"
+  | "editConfirmation";

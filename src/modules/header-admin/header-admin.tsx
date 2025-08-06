@@ -1,60 +1,66 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import styles from "./nav-menu.module.scss";
 import {
   NavMenuItemUI,
   type NavMenuItemProps,
 } from "../../shared/nav-menu-item-ui/nav-menu-item-ui";
+import styles from "./header-admin.module.scss";
+import { useEffect, useState } from "react";
+import { ButtonUI } from "../../shared/button-ui/button-ui";
 import classNames from "classnames";
-import React, { useEffect, useState } from "react";
 
-export const NavMenu = ({ horizontalMenu }: { horizontalMenu: boolean }) => {
+export const HeaderAdmin = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [isOpenMenu, setIsOpenMenu] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
-  const [infoInView, setInfoInView] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const handleInfoClick = (evt: React.MouseEvent) => {
-    evt.preventDefault();
-    const el = document.getElementById("info");
-
-    if (location.pathname !== "/") {
-      navigate("/", { state: { scrollToInfo: true } });
-    } else {
-      if (el) {
-        el.scrollIntoView({ behavior: "smooth" });
-        setIsOpenMenu(false);
-      }
-    }
-  };
-
-  const menuItems: NavMenuItemProps[] = [
+  const adminMenuItems: NavMenuItemProps[] = [
     {
       id: 1,
-      href: "/projects",
       title: "Projects",
-      isActive: location.pathname === "/projects",
+      href: "./projects",
+      isActive: location.pathname === "/admin/projects",
     },
     {
       id: 2,
-      href: "/theater",
-      title: "Theater",
-      isActive: location.pathname === "/theater",
+      title: "Images",
+      href: "./images",
+      isActive: location.pathname === "/admin/images",
     },
     {
       id: 3,
-      href: "/calendar",
-      title: "Calendar",
-      isActive: location.pathname === "/calendar",
+      title: "Videos",
+      href: "./videos",
+      isActive: location.pathname === "/admin/videos",
     },
     {
       id: 4,
-      href: "",
-      title: "Info",
-      isActive: location.pathname === "/" && infoInView,
-      onClick: handleInfoClick,
+      title: "Team members",
+      href: "./team_members",
+      isActive: location.pathname === "/admin/team_members",
+    },
+    {
+      id: 5,
+      title: "Events",
+      href: "./events",
+      isActive: location.pathname === "/admin/events",
+    },
+    {
+      id: 6,
+      title: "Home",
+      href: "/",
+      isActive: location.pathname === "/",
+    },
+    {
+      id: 7,
+      title: "Admin",
+      href: "/admin",
+      isActive: location.pathname === "/admin",
     },
   ];
+
+  const handleBack = () => navigate(-1);
+  const handleOpenMenu = () => setIsOpenMenu(true);
+  const handleCloseMenu = () => setIsOpenMenu(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -65,101 +71,59 @@ export const NavMenu = ({ horizontalMenu }: { horizontalMenu: boolean }) => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (isOpenMenu) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [isOpenMenu]);
-
-  useEffect(() => {
-    if (location.pathname !== "/") return;
-
-    const target = document.getElementById("info");
-    if (!target) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setInfoInView(entry.isIntersecting);
-      },
-      {
-        root: null,
-        threshold: 0.5,
-      }
-    );
-    observer.observe(target);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, [location.pathname]);
-
-  const handleOpenMenu = () => setIsOpenMenu(true);
-  const handleCloseMenu = () => setIsOpenMenu(false);
-
-  const mobileMenuLayout = (
-    <>
-      <div onClick={handleOpenMenu} className={styles.mobileMenu}>
+  const mobileAdminMenuLyout = (
+    <div className={styles.menuMobile}>
+      <ButtonUI type="button" onClick={handleBack}>
+        Back
+      </ButtonUI>
+      <div className={styles.menuMobile__menuIcon} onClick={handleOpenMenu}>
         {menuMobile}
       </div>
-
       <div
-        className={classNames(styles.mobileMenu__content, {
-          [styles.mobileMenu__content_opened]: isOpenMenu,
-          [styles.mobileMenu__content_closed]: !isOpenMenu,
+        className={classNames(styles.menuMobile__menu, {
+          [styles.menuMobile__menu_opened]: isOpenMenu,
+          [styles.menuMobile__menu_closed]: !isOpenMenu,
         })}
       >
         <div
-          className={styles.mobileMenu__content__closeButton}
+          className={styles.menuMobile__menu__closeButton}
           onClick={handleCloseMenu}
         >
           {closeMobileMenuIcon}
         </div>
-        <div className={styles.container_vertical}>
-          {menuItems.map((i) => (
+        <nav className={styles.menuMobile__menu__menuNav}>
+          {adminMenuItems.map((i) => (
             <NavMenuItemUI
               href={i.href}
               title={i.title}
               isActive={i.isActive}
               key={i.id}
               horizontal={false}
-              onClick={i.onClick}
             />
           ))}
-        </div>
+        </nav>
       </div>
-    </>
+    </div>
   );
 
   return (
-    <div
-      className={classNames({
-        [styles.container]: horizontalMenu,
-        [styles.container_vertical]: !horizontalMenu,
-      })}
-    >
-      {isMobile && horizontalMenu ? (
-        mobileMenuLayout
+    <header className={styles.header}>
+      {isMobile ? (
+        mobileAdminMenuLyout
       ) : (
-        <>
-          {menuItems.map((i) => (
+        <nav className={styles.header__nav}>
+          {adminMenuItems.map((i) => (
             <NavMenuItemUI
               href={i.href}
               title={i.title}
               isActive={i.isActive}
               key={i.id}
-              horizontal={horizontalMenu}
-              onClick={i.onClick}
+              horizontal
             />
           ))}
-        </>
+        </nav>
       )}
-    </div>
+    </header>
   );
 };
 

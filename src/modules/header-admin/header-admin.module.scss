@@ -1,0 +1,68 @@
+.header {
+  max-inline-size: 1440px;
+  inline-size: 100%;
+  background-color: #fff;
+  padding: 25px var(--padding-s);
+  animation: appearing 1.5s ease-in-out;
+  position: fixed;
+  top: 0;
+  &__nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.menuMobile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  &__menuIcon {
+    inline-size: 36px;
+    & svg {
+      display: block;
+    }
+  }
+  &__menu {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: var(--font-light);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity .5s ease, visibility .5s ease;
+    &_opened {
+      visibility: visible;
+      opacity: 1;
+    }
+    &_closed {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1s ease, visibility 1s ease;
+    }
+    &__closeButton {
+      inline-size: 36px;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+    &__menuNav {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}
+
+@keyframes appearing {
+  0% {
+    transform: translateY(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

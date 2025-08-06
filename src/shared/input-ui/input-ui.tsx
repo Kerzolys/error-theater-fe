@@ -3,7 +3,7 @@ import styles from "./input-ui.module.scss";
 
 type Props = {
   title: string;
-  isError: boolean;
+  isError?: boolean;
   errorText?: string;
   children: React.ReactNode;
   className?: string;

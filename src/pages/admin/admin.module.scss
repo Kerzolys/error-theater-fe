@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &__navMenu {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-xs);
+    background-color: #fff;
+    padding: var(--padding-s);
+    box-shadow: var(--shadow);
+    border-radius: 20px;
+    animation: appearing 1s ease-in, slide 1s ease-out;
+  }
+}
+
+@keyframes appearing {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(-100px);
+  }
+
+  100% {
+    transform: translateX(0);
+  }
+}

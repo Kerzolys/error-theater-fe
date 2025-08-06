@@ -1,0 +1,11 @@
+.button {
+  color: var(--font-main);
+  font-size: var(--font-size-m);
+  border-radius: 20px;
+  padding: 7px var(--padding-xs);
+  transition: background-color 0.5s ease;
+  &:hover,
+  &:focus-visible {
+    background-color: var(--font-light);
+  }
+}

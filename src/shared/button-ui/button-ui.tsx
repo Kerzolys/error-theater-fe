@@ -3,7 +3,7 @@ import styles from "./button-ui.module.scss";
 
 type Props = {
   type: "button" | "submit" | "reset";
-  disabled: boolean;
+  disabled?: boolean;
   className?: string;
   children: React.ReactNode;
   onClick: () => void;
