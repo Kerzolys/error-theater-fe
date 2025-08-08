@@ -17,18 +17,18 @@ export const AdminPage = () => {
       href: "./projects",
       isActive: location.pathname === "./projects",
     },
-    {
-      id: 2,
-      title: "Images",
-      href: "./images",
-      isActive: location.pathname === "./images",
-    },
-    {
-      id: 3,
-      title: "Videos",
-      href: "./videos",
-      isActive: location.pathname === "./videos",
-    },
+    // {
+    //   id: 2,
+    //   title: "Images",
+    //   href: "./images",
+    //   isActive: location.pathname === "./images",
+    // },
+    // {
+    //   id: 3,
+    //   title: "Videos",
+    //   href: "./videos",
+    //   isActive: location.pathname === "./videos",
+    // },
     {
       id: 4,
       title: "Team members",

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { convertToEmbedUrl } from "../../../../../features/hooks/convertToEmbedUrl";
 import { uploadToYandex } from "../../../../../services/api/uploadToYandex";
 import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
 import { InputFileUI } from "../../../../../shared/input-file-ui/input-file-ui";

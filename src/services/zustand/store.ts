@@ -12,8 +12,6 @@ import { fetchProjectsApi } from "../api/projects-api";
 import { fetchMembersApi } from "../api/members-api";
 import { addItemApi, deleteItemApi, editItemApi } from "../api/firebase-api";
 import { fetchEventsApi } from "../api/events-api";
-import { fetchImagesApi } from "../api/images-api";
-import { fetchVideosApi } from "../api/videos-api";
 import { fetchContactsApi } from "../api/contacts-api";
 
 type AuthState = {
