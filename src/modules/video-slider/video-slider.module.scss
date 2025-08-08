@@ -1,0 +1,38 @@
+.container {
+  display: flex;
+  gap: var(--padding-xs);
+  align-items: center;
+  justify-content: center;
+
+  &__arrowBackward,
+  &__arrowForward {
+    inline-size: 30px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+  &__slider {
+    position: relative;
+    max-inline-size: 700px;
+    inline-size: 100%;
+    aspect-ratio: 4/3;
+    border-radius: 20px;
+    overflow: hidden;
+    &__video {
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 1s ease, opacity 1s ease;
+      &_active {
+        display: block;
+        position: absolute;
+        top: 0;
+        visibility: visible;
+        opacity: 1;
+        inline-size: 100%;
+        block-size: 100%;
+      }
+    }
+  }
+}

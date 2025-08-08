@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  gap: var(--padding-xs);
+  align-items: center;
+  justify-content: center;
+  &__arrowBackward,
+  &__arrowForward {
+    inline-size: 30px;
+    cursor: pointer;
+    transition: transform 0.5s ease;
+    &:hover {
+      transform: scale(1.2);
+    }
+  }
+  &__slider {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    &__slide {
+      max-inline-size: 500px;
+      inline-size: 100%;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 1s ease, opacity 1s ease;
+      cursor: pointer;
+      & img {
+        object-fit: contain;
+        display: block;
+      }
+      &_active {
+        display: block;
+        position: absolute;
+        top: 0;
+        visibility: visible;
+        opacity: 1;
+        inline-size: 100%;
+        block-size: 100%;
+      }
+    }
+  }
+}
+
+.modal__container {
+  max-inline-size: 80vw;
+  display: flex;
+  align-items: center;
+  gap: var(--padding-xs);
+  & .container__slider__slide {
+    max-inline-size: 80vw;
+    inline-size: 100%;
+  }
+}

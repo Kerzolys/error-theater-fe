@@ -38,6 +38,7 @@
     flex-direction: column;
     gap: 15px;
     inline-size: auto;
+    max-block-size: 90vh;
     block-size: auto;
     overflow: auto;
     &__closeButton {

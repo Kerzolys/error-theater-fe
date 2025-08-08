@@ -1,0 +1,26 @@
+.container {
+  margin-block: calc(var(--header-height) + var(--padding-l));
+  background-color: #fff;
+  box-shadow: var(--shadow);
+  padding: var(--padding-l) var(--padding-s);
+  &__title {
+    color: var(--font-main);
+  }
+  &__addButton {
+    margin-block: var(--padding-xs);
+  }
+  &__projects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--padding-m);
+    &__project {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-xs);
+        &__buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+  }
+}

@@ -1,12 +1,10 @@
 export type TProjectForm = {
   id?: string;
-  images_link: string[];
-  images_files: File[];
+  images: File[];
   videos: string[];
   description: string;
   name: string;
-  mainImage_link: string;
-  mainImage_file: File[] | null;
+  mainImage: File | null;
 };
 
 export type TProjectErrors = {

@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
-import {type TProjectErrors, type TProjectForm } from "../types";
+import { type TProjectErrors, type TProjectForm } from "../types";
 import { useProjects } from "../../../../services/zustand/store";
+
+const urlToFile = async (url: string, filename: string): Promise<File> => {
+  const response = await fetch(url);
+  const blob = await response.blob();
+  const mime = blob.type || "image/jpeg";
+  return new File([blob], filename, { type: mime });
+};
 
 export const useProjectForm = (projectId?: string) => {
   const {
@@ -15,10 +22,8 @@ export const useProjectForm = (projectId?: string) => {
   const [values, setValues] = useState<TProjectForm>({
     name: "",
     description: "",
-    mainImage_file: null,
-    mainImage_link: "",
-    images_link: [],
-    images_files: [],
+    mainImage: null,
+    images: [],
     videos: [],
   });
 
@@ -34,15 +39,32 @@ export const useProjectForm = (projectId?: string) => {
 
   useEffect(() => {
     if (projectToEdit) {
-      setValues({
-        name: projectToEdit.name || "",
-        description: projectToEdit.description || "",
-        mainImage_link: projectToEdit.mainImage || "",
-        mainImage_file: null,
-        images_files: [],
-        images_link: projectToEdit.images || [],
-        videos: projectToEdit.videos || [],
-      });
+      const convertImages = async () => {
+        const exportFileName = (url: string) => {
+          const urlArr = url.split("/");
+          return urlArr[urlArr.length - 1];
+        };
+        const imagesFiles = await Promise.all(
+          (projectToEdit.images || []).map((url) =>
+            urlToFile(url, exportFileName(url))
+          )
+        );
+
+        const mainImageFile = await urlToFile(
+          projectToEdit.mainImage,
+          exportFileName(projectToEdit.mainImage)
+        );
+
+        setValues({
+          name: projectToEdit.name || "",
+          description: projectToEdit.description || "",
+          mainImage: mainImageFile,
+          images: imagesFiles,
+          videos: projectToEdit.videos || [],
+        });
+      };
+
+      void convertImages();
     }
   }, [projectToEdit]);
 

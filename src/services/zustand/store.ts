@@ -2,11 +2,9 @@ import { create } from "zustand";
 import type {
   TContact,
   TEvent,
-  TImage,
   TMember,
   TProject,
   TUser,
-  TVideo,
 } from "../../utils/types";
 import { loginUserApi, logoutUserApi, registerUserApi } from "../api/auth-api";
 import { auth } from "../firebase/firebase";
@@ -335,135 +333,135 @@ export const useEvents = create<EventsState>((set) => ({
   },
 }));
 
-type ImagesState = {
-  images: TImage[] | [];
-  isLoading: boolean;
-  error: string | null;
-  fetchImages: () => void;
-  addImage: (newImage: TImage) => void;
-  editImage: (editingImage: TImage) => void;
-  deleteImage: (deletingImageId: string) => void;
-};
+// type ImagesState = {
+//   images: TImage[] | [];
+//   isLoading: boolean;
+//   error: string | null;
+//   fetchImages: () => void;
+//   addImage: (newImage: TImage) => void;
+//   editImage: (editingImage: TImage) => void;
+//   deleteImage: (deletingImageId: string) => void;
+// };
 
-export const useImages = create<ImagesState>((set) => ({
-  images: [],
-  isLoading: false,
-  error: null,
-  fetchImages: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const images = await fetchImagesApi();
-      if (images) {
-        set({ images, isLoading: false });
-      } else {
-        set({ error: "Error fetching images", isLoading: false });
-      }
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-  addImage: async (newImage: TImage) => {
-    set({ isLoading: true, error: null });
-    try {
-      const newImageId = await addItemApi("images", newImage);
-      set((state) => ({
-        images: [...state.images, { ...newImage, id: newImageId }],
-        isLoading: false,
-      }));
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-  editImage: async (editingImage: TImage) => {
-    set({ isLoading: true, error: null });
-    try {
-      await editItemApi("images", editingImage);
-      set((state) => ({
-        images: state.images.map((i) => (editingImage.id ? editingImage : i)),
-        isLoading: false,
-      }));
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-  deleteImage: async (deletingImageId: string) => {
-    set({ isLoading: true, error: null });
-    try {
-      await deleteItemApi("images", deletingImageId);
-      set((state) => ({
-        images: state.images.filter((i) => deletingImageId !== i.id),
-        isLoading: false,
-      }));
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-}));
+// export const useImages = create<ImagesState>((set) => ({
+//   images: [],
+//   isLoading: false,
+//   error: null,
+//   fetchImages: async () => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       const images = await fetchImagesApi();
+//       if (images) {
+//         set({ images, isLoading: false });
+//       } else {
+//         set({ error: "Error fetching images", isLoading: false });
+//       }
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+//   addImage: async (newImage: TImage) => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       const newImageId = await addItemApi("images", newImage);
+//       set((state) => ({
+//         images: [...state.images, { ...newImage, id: newImageId }],
+//         isLoading: false,
+//       }));
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+//   editImage: async (editingImage: TImage) => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       await editItemApi("images", editingImage);
+//       set((state) => ({
+//         images: state.images.map((i) => (editingImage.id ? editingImage : i)),
+//         isLoading: false,
+//       }));
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+//   deleteImage: async (deletingImageId: string) => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       await deleteItemApi("images", deletingImageId);
+//       set((state) => ({
+//         images: state.images.filter((i) => deletingImageId !== i.id),
+//         isLoading: false,
+//       }));
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+// }));
 
-type VideosState = {
-  videos: TVideo[] | [];
-  isLoading: boolean;
-  error: string | null;
-  fetchVideos: () => void;
-  addVideo: (newVideo: TVideo) => void;
-  editVideo: (editingVideo: TVideo) => void;
-  deleteVideo: (deletingVideoId: string) => void;
-};
+// type VideosState = {
+//   videos: TVideo[] | [];
+//   isLoading: boolean;
+//   error: string | null;
+//   fetchVideos: () => void;
+//   addVideo: (newVideo: TVideo) => void;
+//   editVideo: (editingVideo: TVideo) => void;
+//   deleteVideo: (deletingVideoId: string) => void;
+// };
 
-export const useVideos = create<VideosState>((set) => ({
-  videos: [],
-  isLoading: false,
-  error: null,
-  fetchVideos: async () => {
-    set({ isLoading: true, error: null });
-    try {
-      const videos = await fetchVideosApi();
-      if (videos) {
-        set({ videos, isLoading: false });
-      } else {
-        set({ error: "Error fetching videos", isLoading: false });
-      }
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-  addVideo: async (newVideo: TVideo) => {
-    set({ isLoading: true, error: null });
-    try {
-      const newVideoId = await addItemApi("videos", newVideo);
-      set((state) => ({
-        videos: [...state.videos, { ...newVideo, id: newVideoId }],
-        isLoading: false,
-      }));
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-  editVideo: async (editingVideo: TVideo) => {
-    set({ isLoading: true, error: null });
-    try {
-      await editItemApi("videos", editingVideo);
-      set((state) => ({
-        videos: state.videos.map((v) => (editingVideo.id ? editingVideo : v)),
-        isLoading: false,
-      }));
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-  deleteVideo: async (deletingVideoId: string) => {
-    set({ isLoading: true, error: null });
-    try {
-      await deleteItemApi("videos", deletingVideoId);
-      set((state) => ({
-        videos: state.videos.filter((v) => deletingVideoId !== v.id),
-        isLoading: false,
-      }));
-    } catch (err: any) {
-      set({ isLoading: false, error: err.message });
-    }
-  },
-}));
+// export const useVideos = create<VideosState>((set) => ({
+//   videos: [],
+//   isLoading: false,
+//   error: null,
+//   fetchVideos: async () => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       const videos = await fetchVideosApi();
+//       if (videos) {
+//         set({ videos, isLoading: false });
+//       } else {
+//         set({ error: "Error fetching videos", isLoading: false });
+//       }
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+//   addVideo: async (newVideo: TVideo) => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       const newVideoId = await addItemApi("videos", newVideo);
+//       set((state) => ({
+//         videos: [...state.videos, { ...newVideo, id: newVideoId }],
+//         isLoading: false,
+//       }));
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+//   editVideo: async (editingVideo: TVideo) => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       await editItemApi("videos", editingVideo);
+//       set((state) => ({
+//         videos: state.videos.map((v) => (editingVideo.id ? editingVideo : v)),
+//         isLoading: false,
+//       }));
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+//   deleteVideo: async (deletingVideoId: string) => {
+//     set({ isLoading: true, error: null });
+//     try {
+//       await deleteItemApi("videos", deletingVideoId);
+//       set((state) => ({
+//         videos: state.videos.filter((v) => deletingVideoId !== v.id),
+//         isLoading: false,
+//       }));
+//     } catch (err: any) {
+//       set({ isLoading: false, error: err.message });
+//     }
+//   },
+// }));
 
 type ContactsState = {
   contacts: TContact[] | [];

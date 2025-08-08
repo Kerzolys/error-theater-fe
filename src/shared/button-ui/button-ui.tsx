@@ -6,7 +6,7 @@ type Props = {
   disabled?: boolean;
   className?: string;
   children: React.ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
 };
 
 export const ButtonUI = ({

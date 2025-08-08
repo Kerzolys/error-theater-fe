@@ -8,6 +8,7 @@
   top: 0;
   max-inline-size: 1440px;
   inline-size: 100%;
+  z-index: 1;
   &__link {
     font-size: var(--font-size-l);
   }

@@ -1,0 +1,6 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--padding-m);
+  padding-inline: var(--padding-s);
+}

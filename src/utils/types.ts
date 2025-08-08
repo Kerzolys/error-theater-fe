@@ -32,20 +32,20 @@ export type TEvent = {
   description: string;
   link?: string;
   archieved: boolean;
-  image: TImage;
+  image: string;
 };
 
-export type TImage = {
-  id?: string;
-  link: string;
-  title?: string;
-};
+// export type TImage = {
+//   id?: string;
+//   link: string;
+//   title?: string;
+// };
 
-export type TVideo = {
-  id?: string;
-  link: string;
-  name?: string;
-};
+// export type TVideo = {
+//   id?: string;
+//   link: string;
+//   name?: string;
+// };
 
 export type TContact = {
   id?: string;
@@ -62,5 +62,7 @@ export type ModalTypes =
   | "edit"
   | "delete"
   | "addConfirmation"
+  | "waiting"
+  | "error"
   | "deleteConfirmation"
   | "editConfirmation";

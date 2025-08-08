@@ -1,9 +1,10 @@
 import { useState } from "react";
-import type { TVideo } from "../../utils/types";
 import styles from "./video-slider.module.scss";
+import classNames from "classnames";
+import { convertToEmbedUrl } from "../../features/hooks/convertToEmbedUrl";
 
 type Props = {
-  data: TVideo[];
+  data: string[];
 };
 
 export const VideoSlider = ({ data }: Props) => {
@@ -29,17 +30,22 @@ export const VideoSlider = ({ data }: Props) => {
       >
         {arrowBackwardIcon}
       </div>
-      {data.map((v) => (
-        <iframe
-          className={styles.video}
-          width="100%"
-          height="100%"
-          src={v.link}
-          allow="autoplay; fullscreen"
-          title="Background Video"
-          frameBorder={0}
-        />
-      ))}
+      <div className={styles.container__slider}>
+        {data.map((v, index) => (
+          <iframe
+            key={index}
+            className={classNames(styles.container__slider__video, {
+              [styles.container__slider__video_active]: currentVideo === index,
+            })}
+            width="100%"
+            height="100%"
+            src={convertToEmbedUrl(v)}
+            allow="autoplay; fullscreen"
+            title="Background Video"
+            frameBorder={0}
+          />
+        ))}
+      </div>
       <div className={styles.container__arrowForward} onClick={handleNextSlide}>
         {arrowForwardIcon}
       </div>

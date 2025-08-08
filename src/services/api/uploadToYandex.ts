@@ -5,7 +5,7 @@ export const uploadToYandex = async (folderName: string, file: File) => {
   const arrayBuffer = await file.arrayBuffer();
 
   const params = {
-    Bucket: process.env.REACT_APP_YANDEX_BUCKET_NAME!,
+    Bucket: import.meta.env.VITE_YANDEX_BUCKET_NAME!,
     Key: `${folderName}/${file.name}`,
     Body: new Uint8Array(arrayBuffer),
     ContentType: file.type,
@@ -17,7 +17,7 @@ export const uploadToYandex = async (folderName: string, file: File) => {
 
   try {
     await s3Client.send(command);
-    return `https://storage.yandexcloud.net/${process.env.REACT_APP_YANDEX_BUCKET_NAME}/${folderName}/${file.name}`;
+    return `https://storage.yandexcloud.net/${import.meta.env.VITE_YANDEX_BUCKET_NAME}/${folderName}/${file.name}`;
   } catch (err) {
     console.error("Error uploading file:", err);
     throw err;

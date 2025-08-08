@@ -31,8 +31,12 @@ export const Modal = ({ children, onClose, isOpen }: Props) => {
         [styles.modal_opened]: isOpen,
         [styles.modal_closed]: !isOpen,
       })}
+      onClick={onClose}
     >
-      <div className={styles.modal__content}>
+      <div
+        className={styles.modal__content}
+        onClick={(e) => e.stopPropagation()}
+      >
         {children}
         <div onClick={onClose} className={styles.modal__content__closeButton}>
           {closeMobileMenuIcon}

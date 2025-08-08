@@ -1,0 +1,16 @@
+.customInput {
+  inline-size: 100%;
+  padding: var(--padding-xs);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid var(--font-main);
+  border-radius: 20px;
+  transition: background-color 0.3s ease;
+  color: var(--font-main);
+  cursor: pointer;
+  &:hover,
+  &:focus-visible {
+    background-color: var(--font-grey);
+  }
+}

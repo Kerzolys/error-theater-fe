@@ -1,13 +1,15 @@
 import { useState } from "react";
-import type { TImage } from "../../utils/types";
 import styles from "./image-slider.module.scss";
+import classNames from "classnames";
+import { Modal } from "../../shared/modal-ui/modal-ui";
 
 type Props = {
-  data: TImage[];
+  data: string[];
 };
 
 export const ImageSlider = ({ data }: Props) => {
   const [currentImage, setCurrentImage] = useState<number>(0);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const handleNextSlide = () => {
     if (data.length > 0) {
@@ -21,6 +23,35 @@ export const ImageSlider = ({ data }: Props) => {
     }
   };
 
+  const handleOpenModal = () => setIsOpen(true);
+  const handleCloseModal = () => setIsOpen(false);
+
+  const modalPhotoLayout = (
+    <div className={styles.modal__container}>
+      <div
+        className={styles.container__arrowBackward}
+        onClick={handlePreviousSlide}
+      >
+        {arrowBackwardIcon}
+      </div>
+      <div className={styles.container__slider} onClick={handleOpenModal}>
+        {data.map((i, index) => (
+          <img
+            src={i}
+            alt={i ?? ""}
+            key={index}
+            className={classNames(styles.container__slider__slide, {
+              [styles.container__slider__slide_active]: currentImage === index,
+            })}
+          />
+        ))}
+      </div>
+      <div className={styles.container__arrowForward} onClick={handleNextSlide}>
+        {arrowForwardIcon}
+      </div>
+    </div>
+  );
+
   return (
     <div className={styles.container}>
       <div
@@ -29,12 +60,24 @@ export const ImageSlider = ({ data }: Props) => {
       >
         {arrowBackwardIcon}
       </div>
-      {data.map((i) => (
-        <img src={i.link} alt={i.title ?? ""} key={i.id} />
-      ))}
+      <div className={styles.container__slider} onClick={handleOpenModal}>
+        {data.map((i, index) => (
+          <img
+            src={i}
+            alt={i ?? ""}
+            key={index}
+            className={classNames(styles.container__slider__slide, {
+              [styles.container__slider__slide_active]: currentImage === index,
+            })}
+          />
+        ))}
+      </div>
       <div className={styles.container__arrowForward} onClick={handleNextSlide}>
         {arrowForwardIcon}
       </div>
+      <Modal isOpen={isOpen} onClose={handleCloseModal}>
+        {modalPhotoLayout}
+      </Modal>
     </div>
   );
 };
