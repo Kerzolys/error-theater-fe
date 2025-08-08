@@ -10,4 +10,8 @@ export default defineConfig({
       generateScopedName: "[name]__[local]___[hash:base64:5]",
     },
   },
+  build: {
+    outDir: "dist",
+  },
+  base: "/",
 });
