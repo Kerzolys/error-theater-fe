@@ -24,9 +24,16 @@ export const ProjectCard = ({ data }: Props) => {
           : { cursor: "auto" }
       }
     >
-      <div className={styles.container__img}>
+      <div
+        className={styles.container__img}
+        style={{
+          backgroundImage: `url(${data.mainImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      >
         <h2>{data.name}</h2>
-        <img src={data.mainImage} alt={data.name} />
       </div>
     </div>
   );

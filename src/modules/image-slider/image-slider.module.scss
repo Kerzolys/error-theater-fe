@@ -48,9 +48,9 @@
   display: flex;
   align-items: center;
   gap: var(--padding-xs);
-  // & .container__slider {
-  //   max-inline-size: 100%;
-  // }
+  & .container__slider {
+    max-inline-size: 50vw;
+  }
   & .container__slider__slide {
     max-inline-size: 80vw;
     inline-size: 100%;

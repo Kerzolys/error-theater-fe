@@ -21,7 +21,7 @@ export const ProjectPage = () => {
     fetchProjects();
   }, []);
 
-  console.log(projects);
+  console.log(projects)
 
   if (isLoading) return <Preloader />;
 
@@ -42,11 +42,6 @@ export const ProjectPage = () => {
         </div>
         <div className={styles.container__imageSlider}>
           <ImageSlider data={projectData?.images ?? []} />
-        </div>
-        <div>
-          {projectData?.images.map((i) => (
-            <img src={i} alt="" />
-          ))}
         </div>
         <div className={styles.line_large}></div>
         <div className={styles.container__videoSlider}>
