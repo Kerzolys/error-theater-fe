@@ -5,6 +5,7 @@
   grid-template-rows: repeat(4, auto);
   padding: var(--padding-l) var(--padding-s);
   row-gap: var(--padding-m);
+  column-gap: var(--padding-m);
   box-shadow: var(--shadow);
   @media screen and (max-width: 1023px) {
     display: flex;
@@ -29,6 +30,7 @@
       color: var(--font-secondary);
       font-weight: 500;
       margin-block: var(--padding-s);
+      text-align: left;
     }
   }
   &__imageSlider {

@@ -60,8 +60,6 @@ export const ImageSlider = ({ data }: Props) => {
     </div>
   );
 
-  console.log(data);
-
   return (
     <div className={styles.container}>
       {isDataMoreThanOne && (
