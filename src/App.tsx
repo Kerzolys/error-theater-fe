@@ -11,13 +11,12 @@ import { useProjects } from "./services/zustand/store";
 import { useEffect } from "react";
 
 function App() {
-  const { projects, fetchProjects } = useProjects();
+  const { fetchProjects } = useProjects();
 
   useEffect(() => {
     fetchProjects();
   }, []);
 
-  
   return (
     <>
       <Routes>
