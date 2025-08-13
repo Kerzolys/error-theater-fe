@@ -49,10 +49,13 @@
   align-items: center;
   gap: var(--padding-xs);
   & .container__slider {
-    max-inline-size: 50vw;
+    max-inline-size: 60vw;
+    inline-size: 100vw;
   }
   & .container__slider__slide {
-    max-inline-size: 80vw;
-    inline-size: 100%;
+    & img {
+      max-inline-size: 80vw;
+      inline-size: 100%;
+    }
   }
 }
