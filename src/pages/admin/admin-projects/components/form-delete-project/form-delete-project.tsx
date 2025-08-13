@@ -17,7 +17,7 @@ export const FormDeleteProject = ({
   onFailure,
   onClose,
 }: Props) => {
-  const { projects, deleteProject, isLoading, setIsLoading } = useProjectForm();
+  const { projects, deleteProject, setIsLoading } = useProjectForm();
 
   const handleSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();

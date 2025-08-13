@@ -11,7 +11,6 @@ const urlToFile = async (url: string, filename: string): Promise<File> => {
 
 export const useProjectForm = (projectId?: string) => {
   const {
-    fetchProjects,
     projects,
     isLoading,
     setIsLoading,
