@@ -41,12 +41,17 @@
     max-block-size: 90vh;
     block-size: auto;
     overflow: auto;
+    position: relative;
     &__closeButton {
       cursor: pointer;
       position: absolute;
-      top: 10px;
-      right: 10px;
-      inline-size: 36px;
+      top: 7px;
+      right: 7px;
+      inline-size: 20px;
+      transition: transform .3s ease;
+      &:hover {
+        transform: scale((1.1));
+      }
     }
   }
 }

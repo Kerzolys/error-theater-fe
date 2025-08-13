@@ -7,8 +7,17 @@ import { CalendarPage } from "./pages/calendar/calendar";
 import { ProjectPage } from "./modules/project-page/project-page";
 import { AdminPage } from "./pages/admin/admin";
 import { AdminProjects } from "./pages/admin/admin-projects/admin-projects";
+import { useProjects } from "./services/zustand/store";
+import { useEffect } from "react";
 
 function App() {
+  const { projects, fetchProjects } = useProjects();
+
+  useEffect(() => {
+    fetchProjects();
+  }, []);
+
+  
   return (
     <>
       <Routes>

@@ -16,7 +16,7 @@ export const Projects = () => {
   return (
     <div className={styles.container}>
       {projects.map((p) => (
-        <ProjectCard data={p} />
+        <ProjectCard data={p} key={p.id} />
       ))}
     </div>
   );

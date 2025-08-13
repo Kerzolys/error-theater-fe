@@ -10,6 +10,7 @@ type Props = {
 export const ImageSlider = ({ data }: Props) => {
   const [currentImage, setCurrentImage] = useState<number>(0);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const isDataMoreThanOne = data.length > 1;
 
   const handleNextSlide = () => {
     if (data.length > 0) {
@@ -28,12 +29,14 @@ export const ImageSlider = ({ data }: Props) => {
 
   const modalPhotoLayout = (
     <div className={styles.modal__container}>
-      <div
-        className={styles.container__arrowBackward}
-        onClick={handlePreviousSlide}
-      >
-        {arrowBackwardIcon}
-      </div>
+      {isDataMoreThanOne && (
+        <div
+          className={styles.container__arrowBackward}
+          onClick={handlePreviousSlide}
+        >
+          {arrowBackwardIcon}
+        </div>
+      )}
       <div className={styles.container__slider} onClick={handleOpenModal}>
         {data.map((i, index) => (
           <img
@@ -46,20 +49,29 @@ export const ImageSlider = ({ data }: Props) => {
           />
         ))}
       </div>
-      <div className={styles.container__arrowForward} onClick={handleNextSlide}>
-        {arrowForwardIcon}
-      </div>
+      {isDataMoreThanOne && (
+        <div
+          className={styles.container__arrowForward}
+          onClick={handleNextSlide}
+        >
+          {arrowForwardIcon}
+        </div>
+      )}
     </div>
   );
 
+  console.log(data);
+
   return (
     <div className={styles.container}>
-      <div
-        className={styles.container__arrowBackward}
-        onClick={handlePreviousSlide}
-      >
-        {arrowBackwardIcon}
-      </div>
+      {isDataMoreThanOne && (
+        <div
+          className={styles.container__arrowBackward}
+          onClick={handlePreviousSlide}
+        >
+          {arrowBackwardIcon}
+        </div>
+      )}
       <div className={styles.container__slider} onClick={handleOpenModal}>
         {data.map((i, index) => (
           <img
@@ -72,9 +84,14 @@ export const ImageSlider = ({ data }: Props) => {
           />
         ))}
       </div>
-      <div className={styles.container__arrowForward} onClick={handleNextSlide}>
-        {arrowForwardIcon}
-      </div>
+      {isDataMoreThanOne && (
+        <div
+          className={styles.container__arrowForward}
+          onClick={handleNextSlide}
+        >
+          {arrowForwardIcon}
+        </div>
+      )}
       <Modal isOpen={isOpen} onClose={handleCloseModal}>
         {modalPhotoLayout}
       </Modal>

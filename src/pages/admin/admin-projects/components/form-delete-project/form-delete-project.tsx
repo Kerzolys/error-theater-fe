@@ -17,7 +17,7 @@ export const FormDeleteProject = ({
   onFailure,
   onClose,
 }: Props) => {
-  const { projects, deleteProject } = useProjectForm();
+  const { projects, deleteProject, isLoading, setIsLoading } = useProjectForm();
 
   const handleSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
@@ -27,10 +27,19 @@ export const FormDeleteProject = ({
       if (!deleteingProject?.mainImage || deleteingProject?.images.length === 0)
         return;
 
-      await deleteFromYandex(deleteingProject?.mainImage);
-      await Promise.all(
-        deleteingProject.images.map((i) => deleteFromYandex(i))
-      );
+      if (deleteingProject.mainImage) {
+        setIsLoading(true);
+        await deleteFromYandex(deleteingProject?.mainImage);
+        setIsLoading(false);
+      }
+
+      if (deleteingProject.images.length > 0) {
+        setIsLoading(true);
+        await Promise.all(
+          deleteingProject.images.map((i) => deleteFromYandex(i))
+        );
+        setIsLoading(false);
+      }
 
       await deleteProject(id);
       onSuccess?.();

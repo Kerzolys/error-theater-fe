@@ -9,6 +9,7 @@ type Props = {
 
 export const VideoSlider = ({ data }: Props) => {
   const [currentVideo, setCurrentVideo] = useState<number>(0);
+  const dataIsMoreThanOne = data.length > 1;
 
   const handleNextSlide = () => {
     if (data.length > 0) {
@@ -24,12 +25,14 @@ export const VideoSlider = ({ data }: Props) => {
 
   return (
     <div className={styles.container}>
-      <div
-        className={styles.container__arrowBackward}
-        onClick={handlePreviousSlide}
-      >
-        {arrowBackwardIcon}
-      </div>
+      {dataIsMoreThanOne && (
+        <div
+          className={styles.container__arrowBackward}
+          onClick={handlePreviousSlide}
+        >
+          {arrowBackwardIcon}
+        </div>
+      )}
       <div className={styles.container__slider}>
         {data.map((v, index) => (
           <iframe
@@ -46,9 +49,14 @@ export const VideoSlider = ({ data }: Props) => {
           />
         ))}
       </div>
-      <div className={styles.container__arrowForward} onClick={handleNextSlide}>
-        {arrowForwardIcon}
-      </div>
+      {dataIsMoreThanOne && (
+        <div
+          className={styles.container__arrowForward}
+          onClick={handleNextSlide}
+        >
+          {arrowForwardIcon}
+        </div>
+      )}
     </div>
   );
 };

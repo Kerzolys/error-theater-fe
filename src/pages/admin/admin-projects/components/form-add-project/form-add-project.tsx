@@ -19,8 +19,15 @@ const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
 };
 
 export const FormAddProject = ({ onSuccess, onFailure, onClose }: Props) => {
-  const { values, setValues, errors, setErrors, isLoading, addProject } =
-    useProjectForm();
+  const {
+    values,
+    setValues,
+    errors,
+    setErrors,
+    isLoading,
+    setIsLoading,
+    addProject,
+  } = useProjectForm();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypes | null>(null);
 
@@ -69,23 +76,36 @@ export const FormAddProject = ({ onSuccess, onFailure, onClose }: Props) => {
 
     if (hasErrors) return;
 
+    let mainImageLink: string | undefined;
+    let imagesLinks: string[] | undefined;
+
     try {
       if (!values.mainImage || values.images.length === 0) return;
-      const mainImageLink = await uploadToYandex(
-        `project_${values.name}`,
-        values.mainImage
-      );
-      const imagesLinks = await Promise.all(
-        values.images.map((i) =>
-          uploadToYandex(`project_${values.name}_images`, i)
-        )
-      );
+
+      if (values.mainImage) {
+        setIsLoading(true);
+        mainImageLink = await uploadToYandex(
+          `project_${values.name}`,
+          values.mainImage
+        );
+        setIsLoading(false);
+      }
+
+      if (values.images.length > 0) {
+        setIsLoading(true);
+        imagesLinks = await Promise.all(
+          values.images.map((i) =>
+            uploadToYandex(`project_${values.name}_images`, i)
+          )
+        );
+        setIsLoading(false);
+      }
 
       const valuesToSubmit: TProject = {
         name: values.name,
         description: values.description,
-        mainImage: mainImageLink,
-        images: imagesLinks,
+        mainImage: mainImageLink!,
+        images: imagesLinks || [],
         videos: values.videos,
       };
 

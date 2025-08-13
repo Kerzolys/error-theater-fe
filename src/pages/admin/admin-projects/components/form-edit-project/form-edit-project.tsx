@@ -32,6 +32,7 @@ export const FormEditProject = ({
     errors,
     setErrors,
     isLoading,
+    setIsLoading,
     editProject,
     projects,
   } = useProjectForm(id);
@@ -112,14 +113,17 @@ export const FormEditProject = ({
         ) || values.images.length !== initialProject?.images.length;
       let newMainImageLink = initialProject?.mainImage;
       if (mainImageChanged) {
+        setIsLoading(true);
         await deleteFromYandex(initialProject?.mainImage!);
         newMainImageLink = await uploadToYandex(
           `project_${convertNameToYandex(values.name)}`,
           values.mainImage
         );
+        setIsLoading(false);
       }
       let newImagesLinks = initialProject?.images;
       if (imagesChanged) {
+        setIsLoading(true);
         await Promise.all(
           initialProject.images.map((i) => deleteFromYandex(i))
         );
@@ -131,6 +135,7 @@ export const FormEditProject = ({
             )
           )
         );
+        setIsLoading(false);
       }
 
       const updatedProject: TProject = {

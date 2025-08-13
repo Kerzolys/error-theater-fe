@@ -13,6 +13,7 @@ import { fetchMembersApi } from "../api/members-api";
 import { addItemApi, deleteItemApi, editItemApi } from "../api/firebase-api";
 import { fetchEventsApi } from "../api/events-api";
 import { fetchContactsApi } from "../api/contacts-api";
+import { getCache, setCache } from "../../features/hooks/cache";
 
 type AuthState = {
   user: TUser | null;
@@ -134,6 +135,7 @@ export const useAuth = create<AuthState>((set) => ({
 type ProjectsState = {
   projects: TProject[] | [];
   isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
   error: string | null;
   fetchProjects: () => void;
   addProject: (project: TProject) => void;
@@ -142,15 +144,25 @@ type ProjectsState = {
 };
 
 export const useProjects = create<ProjectsState>((set) => ({
-  projects: [],
+  projects: getCache("projects") || [],
   isLoading: false,
+  setIsLoading: (value: boolean) => set({ isLoading: value }),
   error: null,
   fetchProjects: async () => {
     set({ isLoading: true, error: null });
+    const cached = getCache<TProject[]>("projects");
+    if (cached) {
+      set({ projects: cached, isLoading: false });
+      return;
+    }
+
+    console.log('cached', cached)
+
     try {
       const projects = await fetchProjectsApi();
       if (projects) {
         set({ projects, isLoading: false });
+        setCache("projects", projects, 1440);
       } else {
         set({ error: "Error fetching projects", isLoading: false });
       }
@@ -163,10 +175,14 @@ export const useProjects = create<ProjectsState>((set) => ({
 
     try {
       const newProjectId = await addItemApi("projects", newProject);
-      set((state) => ({
-        projects: [...state.projects, { ...newProject, id: newProjectId }],
-        isLoading: false,
-      }));
+      set((state) => {
+        const updated = [
+          ...state.projects,
+          { ...newProject, id: newProjectId },
+        ];
+        setCache("projects", updated, 1440);
+        return { projects: updated, isLoading: false };
+      });
     } catch (err: any) {
       set({ isLoading: false, error: err.message });
     }
@@ -175,12 +191,13 @@ export const useProjects = create<ProjectsState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       await editItemApi("projects", editingProject);
-      set((state) => ({
-        projects: state.projects.map((p) =>
-          editingProject.id ? editingProject : p
-        ),
-        isLoading: false,
-      }));
+      set((state) => {
+        const updated = state.projects.map((p) =>
+          p.id === editingProject.id ? editingProject : p
+        );
+        setCache("projects", updated, 1440);
+        return { projects: updated, isLoading: false };
+      });
     } catch (err: any) {
       set({ isLoading: false, error: err.message });
     }
@@ -189,10 +206,13 @@ export const useProjects = create<ProjectsState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       await deleteItemApi("projects", deletingProjectId);
-      set((state) => ({
-        projects: state.projects.filter((p) => deletingProjectId !== p.id),
-        isLoading: false,
-      }));
+      set((state) => {
+        const updated = state.projects.filter(
+          (p) => deletingProjectId !== p.id
+        );
+        setCache("projects", updated, 1440);
+        return { projects: updated, isLoading: false };
+      });
     } catch (err: any) {
       set({ isLoading: false, error: err.message });
     }

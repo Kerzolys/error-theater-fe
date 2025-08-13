@@ -17,31 +17,19 @@ export const HeaderAdmin = () => {
     {
       id: 1,
       title: "Projects",
-      href: "./projects",
+      href: "/admin/projects",
       isActive: location.pathname === "/admin/projects",
     },
-    // {
-    //   id: 2,
-    //   title: "Images",
-    //   href: "./images",
-    //   isActive: location.pathname === "/admin/images",
-    // },
-    // {
-    //   id: 3,
-    //   title: "Videos",
-    //   href: "./videos",
-    //   isActive: location.pathname === "/admin/videos",
-    // },
     {
       id: 3,
       title: "Team members",
-      href: "./team_members",
+      href: "/admin/team_members",
       isActive: location.pathname === "/admin/team_members",
     },
     {
       id: 4,
       title: "Events",
-      href: "./events",
+      href: "/admin/events",
       isActive: location.pathname === "/admin/events",
     },
     {

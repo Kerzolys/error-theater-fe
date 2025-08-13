@@ -14,6 +14,7 @@ export const useProjectForm = (projectId?: string) => {
     fetchProjects,
     projects,
     isLoading,
+    setIsLoading,
     addProject,
     deleteProject,
     editProject,
@@ -68,15 +69,16 @@ export const useProjectForm = (projectId?: string) => {
     }
   }, [projectToEdit]);
 
-  useEffect(() => {
-    fetchProjects();
-  }, []);
+  // useEffect(() => {
+  //   fetchProjects();
+  // }, []);
 
   return {
     projects,
     values,
     setValues,
     isLoading,
+    setIsLoading,
     errors,
     setErrors,
     addProject,
