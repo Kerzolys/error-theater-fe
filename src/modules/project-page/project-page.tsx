@@ -40,9 +40,9 @@ export const ProjectPage = () => {
           <div className={styles.line}></div>
           <p>{projectData?.description}</p>
         </div>
-        {/* <div className={styles.container__imageSlider}>
+        <div className={styles.container__imageSlider}>
           <ImageSlider data={projectData?.images ?? []} />
-        </div> */}
+        </div>
         <div>
           {projectData?.images.map((i) => (
             <img src={i} alt="" />
