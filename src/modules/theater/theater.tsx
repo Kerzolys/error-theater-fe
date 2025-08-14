@@ -15,10 +15,10 @@ export const Theater = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Error Theater Team</h2>
+      <h2 className={styles.container__title}>Error Theater Team</h2>
       <div className={styles.container__team}>
         {members.map((m) => (
-          <TeamCard data={m} />
+          <TeamCard data={m} key={m.id} />
         ))}
       </div>
     </div>

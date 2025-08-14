@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { ModalTypes, TContact } from "../../../../../utils/types";
+import type { ModalTypes, TContact, TMember } from "../../../../../utils/types";
 import { useMembersForm } from "../../hooks/useMemberForm";
 import styles from "./form-edit-member.module.scss";
 import type { TMemberFormErrors } from "../../types";
@@ -7,6 +7,9 @@ import { InputUI } from "../../../../../shared/input-ui/input-ui";
 import { InputFileUI } from "../../../../../shared/input-file-ui/input-file-ui";
 import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
+import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
+import { uploadToYandex } from "../../../../../services/api/uploadToYandex";
+import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
 
 type Props = {
   id: string;
@@ -32,6 +35,7 @@ export const FormEditMember = ({
     isLoading,
     setIsLoading,
     editMember,
+    members,
   } = useMembersForm(id);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -46,6 +50,8 @@ export const FormEditMember = ({
       ...prev,
       [name]: value,
     }));
+
+    console.log("handlechange", values);
   };
 
   const handleContactChange = (
@@ -90,12 +96,13 @@ export const FormEditMember = ({
   const handleReset = () =>
     setValues({
       name: "",
+      position: "",
       description: "",
       photo: null,
       contacts: [],
     });
 
-  const handelSubmit = (evt: React.FormEvent) => {
+  const handelSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
 
     const newErrors: TMemberFormErrors = {
@@ -104,17 +111,45 @@ export const FormEditMember = ({
       photo: !values.photo,
     };
 
+    setErrors(newErrors);
+
     const hasErrors = Object.values(newErrors).some((e) => e);
     if (hasErrors) return;
 
-    
-
     try {
-      console.log(values);
-      // onSuccess?.();
+      const initialMember = members.find((m) => id === m.id);
+      if (!initialMember) return;
+      if (!values.photo) return;
+
+      const photoChanged = initialMember.photo !== values.photo?.name;
+      let newPhotoLink = initialMember.photo;
+      if (photoChanged) {
+        setIsLoading(true);
+        await deleteFromYandex(initialMember.photo);
+        newPhotoLink = await uploadToYandex(
+          `team_members_${convertNameToYandex(values.name)}`,
+          values.photo
+        );
+        setIsLoading(false);
+      }
+
+      const updatedMember: TMember = {
+        id,
+        name: values.name,
+        position: values.position,
+        description: values.description,
+        photo: newPhotoLink,
+        contacts: values.contacts,
+      };
+      console.log("submittedValues", values);
+      console.log("updatedMember", updatedMember);
+
+      await editMember(updatedMember);
+
+      onSuccess?.();
     } catch (err) {
       console.log(err);
-      // onFailure?.();
+      onFailure?.();
     }
   };
 
@@ -127,6 +162,8 @@ export const FormEditMember = ({
     setIsOpen(false);
     setModalType(null);
   };
+
+  console.log(isLoading);
 
   useEffect(() => {
     if (isLoading) {
@@ -146,6 +183,14 @@ export const FormEditMember = ({
           type="text"
           name="name"
           value={values.name}
+          onChange={handleChange}
+        />
+      </InputUI>
+      <InputUI title="Position of member">
+        <input
+          type="text"
+          name="position"
+          value={values.position}
           onChange={handleChange}
         />
       </InputUI>

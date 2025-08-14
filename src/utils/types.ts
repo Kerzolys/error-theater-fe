@@ -19,6 +19,7 @@ export type TProject = {
 export type TMember = {
   id?: string;
   name: string;
+  position: string;
   description: string;
   contacts: TContact[];
   photo: string;

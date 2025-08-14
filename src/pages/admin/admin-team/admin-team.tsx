@@ -45,9 +45,9 @@ const modalConfig: Partial<
       onClose={onClose!}
     />
   ),
-  editConfirmation: () => <h2>Tis Member has been successfully edited!</h2>,
+  editConfirmation: () => <h2>This Member has been successfully edited!</h2>,
   addConfirmation: () => <h2>New Member has been successfully added!</h2>,
-  deleteConfirmation: () => <h2>THis Member has been successfully deleted!</h2>,
+  deleteConfirmation: () => <h2>This Member has been successfully deleted!</h2>,
 
   error: () => <h2>Something went wrong... Please try again later!</h2>,
 };
@@ -75,41 +75,43 @@ export const AdminTeam = () => {
     fetchMembers();
   }, []);
 
-  if (isLoading) return <Preloader />;
-
   return (
     <LayoutAdmin>
-      <div className={styles.container}>
-        <h2>Error Theater Team Members</h2>
-        <ButtonUI type="button" onClick={() => handleOpenModal("add")}>
-          Add New
-        </ButtonUI>
-        <div className={styles.container__members}>
-          {members.length > 0 ? (
-            members.map((m) => (
-              <div className={styles.container__members__member}>
-                <TeamCard data={m} />
-                <div className={styles.container__members__member__buttons}>
-                  <ButtonUI
-                    type="button"
-                    onClick={() => handleOpenModal("edit", m.id)}
-                  >
-                    Edit Project
-                  </ButtonUI>
-                  <ButtonUI
-                    type="button"
-                    onClick={() => handleOpenModal("delete", m.id)}
-                  >
-                    Delete Project
-                  </ButtonUI>
+      {!isLoading ? (
+        <div className={styles.container}>
+          <h2>Error Theater Team Members</h2>
+          <ButtonUI type="button" onClick={() => handleOpenModal("add")}>
+            Add New
+          </ButtonUI>
+          <div className={styles.container__members}>
+            {members.length > 0 ? (
+              members.map((m) => (
+                <div className={styles.container__members__member} key={m.id}>
+                  <TeamCard data={m} />
+                  <div className={styles.container__members__member__buttons}>
+                    <ButtonUI
+                      type="button"
+                      onClick={() => handleOpenModal("edit", m.id)}
+                    >
+                      Edit Member
+                    </ButtonUI>
+                    <ButtonUI
+                      type="button"
+                      onClick={() => handleOpenModal("delete", m.id)}
+                    >
+                      Delete Member
+                    </ButtonUI>
+                  </div>
                 </div>
-              </div>
-            ))
-          ) : (
-            <h2>There are no members yet!</h2>
-          )}
+              ))
+            ) : (
+              <h2>There are no members yet!</h2>
+            )}
+          </div>
         </div>
-      </div>
+      ) : (
+        <Preloader />
+      )}
       <Modal onClose={handleCloseModal} isOpen={isOpen}>
         {modalType
           ? modalConfig[modalType]?.(

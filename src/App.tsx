@@ -7,15 +7,20 @@ import { CalendarPage } from "./pages/calendar/calendar";
 import { ProjectPage } from "./modules/project-page/project-page";
 import { AdminPage } from "./pages/admin/admin";
 import { AdminProjects } from "./pages/admin/admin-projects/admin-projects";
-import { useProjects } from "./services/zustand/store";
+import { useMembers, useProjects } from "./services/zustand/store";
 import { useEffect } from "react";
 import { AdminTeam } from "./pages/admin/admin-team/admin-team";
 
 function App() {
   const { fetchProjects } = useProjects();
+  const { fetchMembers } = useMembers();
 
   useEffect(() => {
     fetchProjects();
+  }, []);
+  
+  useEffect(() => {
+    fetchMembers();
   }, []);
 
   return (

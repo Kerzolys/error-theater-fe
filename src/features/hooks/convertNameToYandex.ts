@@ -1,2 +1,2 @@
 export const convertNameToYandex = (name: string) =>
-  name.replace(/[\s\W]+/g, "_");
+  name.replace(/[^\p{L}\p{N}]+/gu, "_");

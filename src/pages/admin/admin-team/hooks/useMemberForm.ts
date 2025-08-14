@@ -17,6 +17,7 @@ export const useMembersForm = (memberId?: string) => {
   const [values, setValues] = useState<TMemberForm>({
     name: "",
     description: "",
+    position: "",
     contacts: [
       {
         type: "",
@@ -35,9 +36,6 @@ export const useMembersForm = (memberId?: string) => {
     return memberId ? members.find((p) => p.id === memberId) : null;
   }, [memberId, members]);
 
-  console.log(memberToEdit)
-  console.log('values', values)
-
   useEffect(() => {
     if (memberToEdit) {
       const convertImage = async () => {
@@ -49,6 +47,7 @@ export const useMembersForm = (memberId?: string) => {
         setValues({
           name: memberToEdit.name || "",
           description: memberToEdit.description || "",
+          position: memberToEdit.position || "",
           photo: photoFile,
           contacts: memberToEdit.contacts || [],
         });

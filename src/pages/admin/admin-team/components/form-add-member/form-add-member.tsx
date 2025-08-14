@@ -91,6 +91,7 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
   const handleReset = () =>
     setValues({
       name: "",
+      position: "",
       description: "",
       photo: null,
       contacts: [],
@@ -104,6 +105,8 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
       description: values.description.trim() === "",
       photo: !values.photo,
     };
+
+    setErrors(newErrors);
 
     const hasErrors = Object.values(newErrors).some((e) => e);
     if (hasErrors) return;
@@ -123,6 +126,7 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
 
       const newMember: TMember = {
         name: values.name,
+        position: values.position,
         description: values.description,
         photo: photoLink!,
         contacts: values.contacts || [],
@@ -147,6 +151,8 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
     setModalType(null);
   };
 
+  console.log(isLoading);
+
   useEffect(() => {
     if (isLoading) {
       handleOpenModal("waiting");
@@ -165,6 +171,14 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
           type="text"
           name="name"
           value={values.name}
+          onChange={handleChange}
+        />
+      </InputUI>
+      <InputUI title="Position of member">
+        <input
+          type="text"
+          name="position"
+          value={values.position}
           onChange={handleChange}
         />
       </InputUI>

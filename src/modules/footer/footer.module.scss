@@ -1,6 +1,7 @@
 .container {
     background-color: #fff;
     padding: var(--padding-s);
+    box-shadow: var(--shadow);
     &__infoBlock {
         display: flex;
         justify-content: space-between;
