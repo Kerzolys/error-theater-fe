@@ -16,28 +16,36 @@
     position: relative;
     border-radius: 20px;
     overflow: hidden;
+    inline-size: fit-content;
     max-inline-size: 500px;
-    inline-size: 100%;
-    aspect-ratio: 4/3;
+    block-size: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     &__slide {
+      position: absolute;
+      top: 0;
+      left: 0;
       visibility: hidden;
       opacity: 0;
       transition: opacity 1s ease;
       cursor: pointer;
-      & img {
-        object-fit: contain;
-        display: block;
-        inline-size: 100%;
-        block-size: 100%;
-      }
+      inline-size: fit-content;
+      max-inline-size: 100%;
+      block-size: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       &_active {
-        display: block;
-        position: absolute;
-        top: 0;
+        position: relative;
         visibility: visible;
         opacity: 1;
-        inline-size: 100%;
+      }
+      & img {
         block-size: 100%;
+        inline-size: auto;
+        object-fit: contain;
+        max-inline-size: 100%;
       }
     }
   }
@@ -45,17 +53,47 @@
 
 .modal__container {
   max-inline-size: 80vw;
+  max-block-size: 80vh;
   display: flex;
   align-items: center;
   gap: var(--padding-xs);
+  justify-content: center;
+  overflow: hidden;
   & .container__slider {
-    max-inline-size: 50vw;
-    inline-size: 100vw;
+    position: relative;
+    inline-size: fit-content;
+    max-inline-size: 80vw;
+    block-size: auto;
+    max-block-size: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   & .container__slider__slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    inline-size: fit-content;
+    block-size: auto;
+    max-block-size: 80vh;
+    max-inline-size: 80vw;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 1s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    &_active {
+      position: relative;
+      visibility: visible;
+      opacity: 1;
+    }
     & img {
+      block-size: auto;
+      inline-size: auto;
+      max-block-size: 80vh;
       max-inline-size: 80vw;
-      inline-size: 100%;
+      object-fit: contain;
     }
   }
 }
