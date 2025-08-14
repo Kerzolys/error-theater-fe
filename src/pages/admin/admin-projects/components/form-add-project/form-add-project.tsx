@@ -7,6 +7,7 @@ import type { ModalTypes, TProject } from "../../../../../utils/types";
 import { useProjectForm } from "../../hooks/useProjectForm";
 import styles from "./form-add-project.module.scss";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
+import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
 
 type Props = {
   onSuccess?: () => void;
@@ -85,7 +86,7 @@ export const FormAddProject = ({ onSuccess, onFailure, onClose }: Props) => {
       if (values.mainImage) {
         setIsLoading(true);
         mainImageLink = await uploadToYandex(
-          `project_${values.name}`,
+          `project_${convertNameToYandex(values.name)}`,
           values.mainImage
         );
         setIsLoading(false);
@@ -95,7 +96,10 @@ export const FormAddProject = ({ onSuccess, onFailure, onClose }: Props) => {
         setIsLoading(true);
         imagesLinks = await Promise.all(
           values.images.map((i) =>
-            uploadToYandex(`project_${values.name}_images`, i)
+            uploadToYandex(
+              `project_${convertNameToYandex(values.name)}_images`,
+              i
+            )
           )
         );
         setIsLoading(false);

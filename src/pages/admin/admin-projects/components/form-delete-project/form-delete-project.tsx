@@ -3,6 +3,9 @@ import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
 import { useProjectForm } from "../../hooks/useProjectForm";
 import styles from "./form-delete-project.module.scss";
 import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
+import { Modal } from "../../../../../shared/modal-ui/modal-ui";
+import type { ModalTypes } from "../../../../../utils/types";
+import { useEffect, useState } from "react";
 
 type Props = {
   id: string;
@@ -11,13 +14,19 @@ type Props = {
   onClose: () => void;
 };
 
+const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
+  waiting: () => <h2>Please wait...</h2>,
+};
+
 export const FormDeleteProject = ({
   id,
   onSuccess,
   onFailure,
   onClose,
 }: Props) => {
-  const { projects, deleteProject, setIsLoading } = useProjectForm();
+  const { projects, deleteProject,isLoading, setIsLoading } = useProjectForm();
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [modalType, setModalType] = useState<ModalTypes | null>(null);
 
   const handleSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
@@ -48,6 +57,24 @@ export const FormDeleteProject = ({
       onFailure?.();
     }
   };
+
+    const handleOpenModal = (type: ModalTypes) => {
+      setModalType(type);
+      setIsOpen(true);
+    };
+  
+    const handleCloseModal = () => {
+      setIsOpen(false);
+      setModalType(null);
+    };
+  
+    useEffect(() => {
+      if (isLoading) {
+        handleOpenModal("waiting");
+      }
+      return () => handleCloseModal();
+    }, [isLoading]);
+
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
       <h2>Are you sure?</h2>
@@ -57,6 +84,9 @@ export const FormDeleteProject = ({
           Cancel
         </ButtonUI>
       </div>
+      <Modal isOpen={isOpen} onClose={handleCloseModal}>
+              {modalType && modalConfig[modalType]?.()}
+            </Modal>
     </form>
   );
 };

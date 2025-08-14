@@ -156,8 +156,6 @@ export const useProjects = create<ProjectsState>((set) => ({
       return;
     }
 
-    console.log('cached', cached)
-
     try {
       const projects = await fetchProjectsApi();
       if (projects) {
@@ -222,6 +220,7 @@ export const useProjects = create<ProjectsState>((set) => ({
 type MembersState = {
   members: TMember[] | [];
   isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
   error: string | null;
   fetchMembers: () => void;
   addMember: (member: TMember) => void;
@@ -232,6 +231,7 @@ type MembersState = {
 export const useMembers = create<MembersState>((set) => ({
   members: [],
   isLoading: false,
+  setIsLoading: (value: boolean) => set({ isLoading: value }),
   error: null,
   fetchMembers: async () => {
     set({ isLoading: true, error: null });

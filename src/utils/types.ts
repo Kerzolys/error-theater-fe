@@ -20,7 +20,8 @@ export type TMember = {
   id?: string;
   name: string;
   description: string;
-  contact: TContact[];
+  contacts: TContact[];
+  photo: string;
 };
 
 export type TEvent = {
@@ -49,7 +50,7 @@ export type TEvent = {
 
 export type TContact = {
   id?: string;
-  name: string;
+  type: string;
   contact: string;
 };
 

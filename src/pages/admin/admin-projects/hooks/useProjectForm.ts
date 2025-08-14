@@ -1,13 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { type TProjectErrors, type TProjectForm } from "../types";
 import { useProjects } from "../../../../services/zustand/store";
-
-const urlToFile = async (url: string, filename: string): Promise<File> => {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  const mime = blob.type || "image/jpeg";
-  return new File([blob], filename, { type: mime });
-};
+import { urlToFile } from "../../../../features/hooks/urlToFile";
+import { exportFileName } from "../../../../features/hooks/exportFileName";
 
 export const useProjectForm = (projectId?: string) => {
   const {
@@ -40,10 +35,7 @@ export const useProjectForm = (projectId?: string) => {
   useEffect(() => {
     if (projectToEdit) {
       const convertImages = async () => {
-        const exportFileName = (url: string) => {
-          const urlArr = url.split("/");
-          return urlArr[urlArr.length - 1];
-        };
+        
         const imagesFiles = await Promise.all(
           (projectToEdit.images || []).map((url) =>
             urlToFile(url, exportFileName(url))
@@ -67,10 +59,6 @@ export const useProjectForm = (projectId?: string) => {
       void convertImages();
     }
   }, [projectToEdit]);
-
-  // useEffect(() => {
-  //   fetchProjects();
-  // }, []);
 
   return {
     projects,

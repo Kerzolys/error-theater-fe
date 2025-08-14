@@ -3,4 +3,8 @@
   flex-wrap: wrap;
   gap: var(--padding-m);
   padding-inline: var(--padding-s);
+  justify-content: space-evenly;
+  @media screen and (max-width: 767px) {
+    justify-content: center;
+  }
 }

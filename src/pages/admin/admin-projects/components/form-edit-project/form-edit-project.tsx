@@ -8,6 +8,7 @@ import type { ModalTypes, TProject } from "../../../../../utils/types";
 import { useProjectForm } from "../../hooks/useProjectForm";
 import styles from "./form-edit-project.module.scss";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
+import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
 
 type Props = {
   id: string;
@@ -100,8 +101,7 @@ export const FormEditProject = ({
 
     try {
       const initialProject = projects.find((p) => p.id === id);
-      const convertNameToYandex = (name: string) =>
-        name.replace(/[\s\W]+/g, "_");
+      
       if (!values.mainImage || values.images.length === 0) return;
       if (!initialProject) return;
 
