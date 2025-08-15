@@ -33,6 +33,7 @@
             color: var(--font-secondary);
             font-size: var(--font-size-m);
             text-align: left;
+            white-space: pre-line;
         }
         &__contacts {
             display: flex;

@@ -10,6 +10,7 @@ import { Modal } from "../../../../../shared/modal-ui/modal-ui";
 import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
 import { uploadToYandex } from "../../../../../services/api/uploadToYandex";
 import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
+import { Preloader } from "../../../../../shared/preloader/preloader";
 
 type Props = {
   id: string;
@@ -18,7 +19,10 @@ type Props = {
   onClose: () => void;
 };
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => <h2>Please wait...</h2>,
+  waiting: () =>  <>
+        <h2>Please wait...</h2>
+        <Preloader />
+      </>,
 };
 
 export const FormEditMember = ({
@@ -50,8 +54,6 @@ export const FormEditMember = ({
       ...prev,
       [name]: value,
     }));
-
-    console.log("handlechange", values);
   };
 
   const handleContactChange = (
@@ -141,8 +143,6 @@ export const FormEditMember = ({
         photo: newPhotoLink,
         contacts: values.contacts,
       };
-      console.log("submittedValues", values);
-      console.log("updatedMember", updatedMember);
 
       await editMember(updatedMember);
 
@@ -162,8 +162,6 @@ export const FormEditMember = ({
     setIsOpen(false);
     setModalType(null);
   };
-
-  console.log(isLoading);
 
   useEffect(() => {
     if (isLoading) {
@@ -206,7 +204,7 @@ export const FormEditMember = ({
         />
       </InputUI>
       <InputUI
-        title="Name of member"
+        title="Photo of member"
         isError={errors.photo && !values.photo}
         errorText="Field is required!"
       >

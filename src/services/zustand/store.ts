@@ -291,6 +291,7 @@ export const useMembers = create<MembersState>((set) => ({
 type EventsState = {
   events: TEvent[] | [];
   isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
   error: string | null;
   fetchEvents: () => void;
   addEvent: (newEvent: TEvent) => void;
@@ -301,13 +302,20 @@ type EventsState = {
 export const useEvents = create<EventsState>((set) => ({
   events: [],
   isLoading: false,
+  setIsLoading: (value: boolean) => set({ isLoading: value }),
   error: null,
   fetchEvents: async () => {
     set({ isLoading: true, error: null });
+    const cached = getCache<TEvent[]>("events");
+    if (cached) {
+      set({ events: cached, isLoading: false });
+      return;
+    }
     try {
       const events = await fetchEventsApi();
       if (events) {
         set({ events, isLoading: false });
+        setCache("events", events, 1440);
       } else {
         set({ error: "Error fetching events", isLoading: false });
       }
@@ -319,10 +327,11 @@ export const useEvents = create<EventsState>((set) => ({
     set({ isLoading: true, error: null });
     try {
       const newEventId = await addItemApi("events", newEvent);
-      set((state) => ({
-        events: [...state.events, { ...newEvent, id: newEventId }],
-        isLoading: false,
-      }));
+      set((state) => {
+        const updated = [...state.events, { ...newEvent, id: newEventId }];
+        setCache("events", updated, 1440);
+        return { events: updated, isLoading: false };
+      });
     } catch (err: any) {
       set({ isLoading: false, error: err.message });
     }
@@ -330,11 +339,14 @@ export const useEvents = create<EventsState>((set) => ({
   editEvent: async (editingEvent: TEvent) => {
     set({ isLoading: true, error: null });
     try {
-      await editItemApi("members", editingEvent);
-      set((state) => ({
-        events: state.events.map((e) => (editingEvent.id ? editingEvent : e)),
-        isLoading: false,
-      }));
+      await editItemApi("events", editingEvent);
+      set((state) => {
+        const updated = state.events.map((e) =>
+          e.id === editingEvent.id ? editingEvent : e
+        );
+        setCache("events", updated, 1440);
+        return { events: updated, isLoading: false };
+      });
     } catch (err: any) {
       set({ isLoading: false, error: err.message });
     }
@@ -342,11 +354,12 @@ export const useEvents = create<EventsState>((set) => ({
   deleteEvent: async (deletingEventId: string) => {
     set({ isLoading: true, error: null });
     try {
-      await deleteItemApi("members", deletingEventId);
-      set((state) => ({
-        events: state.events.filter((e) => deletingEventId !== e.id),
-        isLoading: false,
-      }));
+      await deleteItemApi("events", deletingEventId);
+      set((state) => {
+        const updated = state.events.filter((m) => deletingEventId !== m.id);
+        setCache("events", updated, 1440);
+        return { events: updated, isLoading: false };
+      });
     } catch (err: any) {
       set({ isLoading: false, error: err.message });
     }

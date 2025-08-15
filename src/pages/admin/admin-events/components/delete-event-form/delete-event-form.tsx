@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
 import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
 import type { ModalTypes } from "../../../../../utils/types";
-import { useMembersForm } from "../../hooks/useMemberForm";
+
 import styles from "./form-delete-member.module.scss";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
+import { useEventForm } from "../../hooks/useEventForm";
 import { Preloader } from "../../../../../shared/preloader/preloader";
 
 type Props = {
@@ -23,13 +24,13 @@ const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
   ),
 };
 
-export const FormDeleteMember = ({
+export const FormDeleteEvent = ({
   id,
   onSuccess,
   onFailure,
   onClose,
 }: Props) => {
-  const { deleteMember, isLoading, setIsLoading, members } = useMembersForm(id);
+  const { deleteEvent, isLoading, setIsLoading, events } = useEventForm(id);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypes | null>(null);
 
@@ -37,17 +38,17 @@ export const FormDeleteMember = ({
     evt.preventDefault();
 
     try {
-      const deleteingMember = members.find((m) => m.id === id);
+      const deleteingMember = events.find((e) => e.id === id);
 
-      if (!deleteingMember?.photo) return;
+      if (!deleteingMember?.image) return;
 
-      if (deleteingMember.photo) {
+      if (deleteingMember.image) {
         setIsLoading(true);
-        await deleteFromYandex(deleteingMember.photo);
+        await deleteFromYandex(deleteingMember.image);
         setIsLoading(false);
       }
 
-      await deleteMember(id);
+      await deleteEvent(id);
       onSuccess?.();
     } catch (err) {
       console.log(err);
@@ -76,7 +77,7 @@ export const FormDeleteMember = ({
     <form onSubmit={handleSubmit} className={styles.form}>
       <h2>Are you sure?</h2>
       <div className={styles.form__buttons}>
-        <ButtonUI type="submit">Delete Project</ButtonUI>
+        <ButtonUI type="submit">Delete Event</ButtonUI>
         <ButtonUI type="button" onClick={onClose}>
           Cancel
         </ButtonUI>

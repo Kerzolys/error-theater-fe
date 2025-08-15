@@ -1,30 +1,39 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import type { ModalTypes, TEvent } from "../../../../../utils/types";
 import { InputUI } from "../../../../../shared/input-ui/input-ui";
-import { useMembersForm } from "../../hooks/useMemberForm";
-import styles from "./form-add-member.module.scss";
-import {
-  type ModalTypes,
-  type TContact,
-  type TMember,
-} from "../../../../../utils/types";
-import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
 import { InputFileUI } from "../../../../../shared/input-file-ui/input-file-ui";
-import type { TMemberFormErrors } from "../../types";
+import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
+import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
 import { uploadToYandex } from "../../../../../services/api/uploadToYandex";
 import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
+import { useEventForm } from "../../hooks/useEventForm";
+import type { TEventFormErrors } from "../../types";
+
+import styles from "./form-edit-member.module.scss";
+import { Preloader } from "../../../../../shared/preloader/preloader";
 
 type Props = {
+  id: string;
   onSuccess?: () => void;
   onFailure?: () => void;
   onClose: () => void;
 };
-
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => <h2>Please wait...</h2>,
+  waiting: () => (
+    <>
+      <h2>Please wait...</h2>
+      <Preloader />
+    </>
+  ),
 };
 
-export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
+export const FormEditEvent = ({
+  id,
+  onSuccess,
+  onFailure,
+  onClose,
+}: Props) => {
   const {
     values,
     setValues,
@@ -32,8 +41,9 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
     setErrors,
     isLoading,
     setIsLoading,
-    addMember,
-  } = useMembersForm();
+    editEvent,
+    events,
+  } = useEventForm(id);
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypes | null>(null);
@@ -46,19 +56,6 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
     setValues((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
-
-  const handleContactChange = (
-    index: number,
-    field: keyof TContact,
-    value: string
-  ) => {
-    setValues((prev) => ({
-      ...prev,
-      contacts: prev.contacts.map((c, i) =>
-        i === index ? { ...c, [field]: value } : c
-      ),
     }));
   };
 
@@ -76,34 +73,26 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
   const handleDeleteFile = () =>
     setValues((prev) => ({ ...prev, photo: null }));
 
-  const handleAddContact = () =>
-    setValues((prev) => ({
-      ...prev,
-      contacts: [...prev.contacts, { type: "", contact: "" }],
-    }));
-
-  const handleDeleteContact = (index: number) =>
-    setValues((prev) => ({
-      ...prev,
-      contacts: prev.contacts.filter((_, i) => i !== index),
-    }));
-
   const handleReset = () =>
     setValues({
+      date: "",
+      time: "",
+      location: "",
       name: "",
-      position: "",
       description: "",
-      photo: null,
-      contacts: [],
+      image: null,
+      link: "",
     });
 
   const handelSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
 
-    const newErrors: TMemberFormErrors = {
+    const newErrors: TEventFormErrors = {
+      date: values.date.trim() === "",
+      time: values.time.trim() === "",
+      location: values.location.trim() === "",
       name: values.name.trim() === "",
       description: values.description.trim() === "",
-      photo: !values.photo,
     };
 
     setErrors(newErrors);
@@ -111,28 +100,35 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
     const hasErrors = Object.values(newErrors).some((e) => e);
     if (hasErrors) return;
 
-    let photoLink: string | undefined;
     try {
-      if (!values.photo) return;
+      const initialEvent = events.find((e) => id === e.id);
+      if (!initialEvent) return;
+      if (!values.image) return;
 
-      if (values.photo) {
+      const imageChanged = initialEvent.image !== values.image?.name;
+      let newImageLink = initialEvent.image;
+      if (imageChanged) {
         setIsLoading(true);
-        photoLink = await uploadToYandex(
-          `team_members_${convertNameToYandex(values.name)}`,
-          values.photo
+        await deleteFromYandex(initialEvent.image);
+        newImageLink = await uploadToYandex(
+          `events_${convertNameToYandex(values.name)}`,
+          values.image
         );
         setIsLoading(false);
       }
 
-      const newMember: TMember = {
+      const updatedEvent: TEvent = {
+        id,
+        date: values.date,
+        time: values.time,
+        location: values.location,
         name: values.name,
-        position: values.position,
         description: values.description,
-        photo: photoLink!,
-        contacts: values.contacts || [],
+        image: newImageLink,
+        link: values.link,
       };
 
-      await addMember(newMember);
+      await editEvent(updatedEvent);
 
       onSuccess?.();
     } catch (err) {
@@ -161,8 +157,43 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
   return (
     <form className={styles.form} onSubmit={handelSubmit}>
       <InputUI
-        title="Name of member"
-        isError={errors.name && values.name === ""}
+        title="Date"
+        isError={errors.date && values.date === ""}
+        errorText="Field is required!"
+      >
+        <input
+          type="text"
+          name="date"
+          value={values.date}
+          onChange={handleChange}
+        />
+      </InputUI>
+      <InputUI
+        title="Time"
+        isError={errors.time && values.time === ""}
+        errorText="Field is required!"
+      >
+        <input
+          type="text"
+          name="time"
+          value={values.time}
+          onChange={handleChange}
+        />
+      </InputUI>
+      <InputUI
+        title="Location"
+        isError={errors.location && values.location === ""}
+        errorText="Field is required!"
+      >
+        <textarea
+          value={values.location}
+          name="location"
+          onChange={handleChange}
+        />
+      </InputUI>
+      <InputUI
+        title="Name of event"
+        isError={errors.name && !values.name}
         errorText="Field is required!"
       >
         <input
@@ -172,84 +203,49 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
           onChange={handleChange}
         />
       </InputUI>
-      <InputUI title="Position of member">
+      <InputUI
+        title="Description of event"
+        isError={errors.description && !values.description}
+        errorText="Field is required!"
+      >
         <input
           type="text"
-          name="position"
-          value={values.position}
-          onChange={handleChange}
-        />
-      </InputUI>
-      <InputUI
-        title="Short bio"
-        isError={errors.description && values.description === ""}
-        errorText="Field is required!"
-      >
-        <textarea
-          value={values.description}
           name="description"
+          value={values.description}
           onChange={handleChange}
         />
       </InputUI>
-      <InputUI
-        title="Photo of member"
-        isError={errors.photo && !values.photo}
-        errorText="Field is required!"
-      >
-        <InputFileUI name="photo" onChange={handleFileChange} />
+      <InputUI title="Image of event">
+        <InputFileUI name="image" onChange={handleFileChange} />
       </InputUI>
-      {values.photo && (
+      {values.image && (
         <div className={styles.filesBlock}>
           <div className={styles.filesBlock__file}>
             <div
               className={styles.filesBlock__file__deleteButton}
               onClick={() => {
-                if (values.photo) handleDeleteFile();
+                if (values.image) handleDeleteFile();
               }}
             >
               {deleteIcon}
             </div>
-            <img src={URL.createObjectURL(values.photo)} alt="" />
-            <span>{values.photo.name}</span>
+            <img
+              src={URL.createObjectURL(values.image)}
+              alt={values.image.name}
+            />
+            <span>{values.image.name}</span>
           </div>
         </div>
       )}
-      <div className={styles.form__contacts}>
-        {values.contacts.map((c, index) => (
-          <div className={styles.form__contacts__input}>
-            <InputUI title="Platform / Service">
-              <input
-                type="text"
-                value={c.type}
-                onChange={(e) =>
-                  handleContactChange(index, "type", e.target.value)
-                }
-              />
-            </InputUI>
-            <InputUI title="Contact Information">
-              <input
-                type="text"
-                value={c.contact}
-                onChange={(e) =>
-                  handleContactChange(index, "contact", e.target.value)
-                }
-              />
-            </InputUI>
-            <div
-              onClick={() => handleDeleteContact(index)}
-              className={styles.form__deleteContactButton}
-            >
-              {deleteIcon}
-            </div>
-          </div>
-        ))}
-        <div
-          onClick={handleAddContact}
-          className={styles.form__addContactButton}
-        >
-          {addIcon}
-        </div>
-      </div>
+      <InputUI title="Link of event">
+        <input
+          type="text"
+          name="link"
+          value={values.link}
+          onChange={handleChange}
+        />
+      </InputUI>
+
       <div className={styles.form__buttons}>
         <ButtonUI type="submit">Save</ButtonUI>
         <ButtonUI type="button" onClick={handleReset}>

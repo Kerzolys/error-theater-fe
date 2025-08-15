@@ -33,8 +33,8 @@ export type TEvent = {
   time: string;
   description: string;
   link?: string;
-  archieved: boolean;
-  image: string;
+  archieved?: boolean;
+  image?: string;
 };
 
 // export type TImage = {
