@@ -3,10 +3,10 @@ import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
 import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
 import type { ModalTypes } from "../../../../../utils/types";
 
-import styles from "./form-delete-member.module.scss";
+import styles from "./form-delete-event.module.scss";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
 import { useEventForm } from "../../hooks/useEventForm";
-import { Preloader } from "../../../../../shared/preloader/preloader";
+import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
   id: string;
@@ -16,12 +16,7 @@ type Props = {
 };
 
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => (
-    <>
-      <h2>Please wait...</h2>
-      <Preloader />
-    </>
-  ),
+  waiting: () => <ModalPreloader />,
 };
 
 export const FormDeleteEvent = ({
@@ -36,15 +31,13 @@ export const FormDeleteEvent = ({
 
   const handleSubmit = async (evt: React.FormEvent) => {
     evt.preventDefault();
-
     try {
-      const deleteingMember = events.find((e) => e.id === id);
+      const deletingEvent = events.find((e) => e.id === id);
+    console.log(deletingEvent)
 
-      if (!deleteingMember?.image) return;
-
-      if (deleteingMember.image) {
+      if (deletingEvent?.image) {
         setIsLoading(true);
-        await deleteFromYandex(deleteingMember.image);
+        await deleteFromYandex(deletingEvent.image);
         setIsLoading(false);
       }
 

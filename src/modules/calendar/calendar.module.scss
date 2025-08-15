@@ -1,0 +1,22 @@
+.container {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: var(--padding-l) var(--padding-s);
+  &__tabs {
+    display: flex;
+    gap: var(--padding-s);
+    margin-block-end: var(--padding-s);
+    &__tab {
+      &_active {
+        background-color: var(--font-grey);
+      }
+    }
+  }
+  &__calendar {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-m);
+
+  }
+}

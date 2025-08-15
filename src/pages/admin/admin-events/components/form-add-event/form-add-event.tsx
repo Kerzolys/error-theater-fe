@@ -8,9 +8,9 @@ import { uploadToYandex } from "../../../../../services/api/uploadToYandex";
 import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
 import { useEventForm } from "../../hooks/useEventForm";
 import type { TEventFormErrors } from "../../types";
-import { Preloader } from "../../../../../shared/preloader/preloader";
 
-import styles from "./form-edit-member.module.scss";
+import styles from "./form-add-event.module.scss";
+import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
   onSuccess?: () => void;
@@ -18,12 +18,7 @@ type Props = {
   onClose: () => void;
 };
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => (
-    <>
-      <h2>Please wait...</h2>
-      <Preloader />
-    </>
-  ),
+  waiting: () => <ModalPreloader />,
 };
 
 export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
@@ -49,6 +44,31 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
       ...prev,
       [name]: value,
     }));
+
+    if (name === "date") {
+      setErrors((prev) => ({
+        ...prev,
+        date: value !== "" && !isDateValid(value),
+      }));
+    }
+
+    if (name === "time") {
+      setErrors((prev) => ({
+        ...prev,
+        time: value !== "" && !isTimeValid(value),
+      }));
+    }
+  };
+
+  const isDateValid = (date: string) => {
+    const pattern =
+      /^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{1,2}, \d{4}$/;
+    return pattern.test(date);
+  };
+
+  const isTimeValid = (time: string) => {
+    const pattern = /^([01]\d|2[0-3]):[0-5]\d$/;
+    return pattern.test(time);
   };
 
   const handleFileChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,8 +100,8 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
     evt.preventDefault();
 
     const newErrors: TEventFormErrors = {
-      date: values.date.trim() === "",
-      time: values.time.trim() === "",
+      date: values.date.trim() === "" || !isDateValid(values.date),
+      time: values.time.trim() === "" || !isTimeValid(values.time),
       location: values.location.trim() === "",
       name: values.name.trim() === "",
       description: values.description.trim() === "",
@@ -95,7 +115,7 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
     let imageLink: string | undefined;
 
     try {
-      if (!values.image) return;
+      // if (!values.image) return;
 
       if (values.image) {
         setIsLoading(true);
@@ -112,8 +132,9 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
         location: values.location,
         name: values.name,
         description: values.description,
-        image: imageLink,
-        link: values.link,
+        image: imageLink || "",
+        link: values.link || "",
+        archieved: false,
       };
 
       await addEvent(newEvent);
@@ -146,8 +167,12 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
     <form className={styles.form} onSubmit={handelSubmit}>
       <InputUI
         title="Date"
-        isError={errors.date && values.date === ""}
-        errorText="Field is required!"
+        isError={(errors.date && values.date === "") || errors.date}
+        errorText={
+          values.date === ""
+            ? "Field is required!"
+            : "Invalid date format (e.g., Aug 16, 2025)"
+        }
       >
         <input
           type="text"
@@ -158,8 +183,12 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
       </InputUI>
       <InputUI
         title="Time"
-        isError={errors.time && values.time === ""}
-        errorText="Field is required!"
+        isError={(errors.time && values.time === "") || errors.time}
+        errorText={
+          values.time === ""
+            ? "Field is required!"
+            : "Invalid time format (HH:MM)"
+        }
       >
         <input
           type="text"
@@ -173,7 +202,8 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
         isError={errors.location && values.location === ""}
         errorText="Field is required!"
       >
-        <textarea
+        <input
+          type="text"
           value={values.location}
           name="location"
           onChange={handleChange}
@@ -196,8 +226,7 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
         isError={errors.description && !values.description}
         errorText="Field is required!"
       >
-        <input
-          type="text"
+        <textarea
           name="description"
           value={values.description}
           onChange={handleChange}
@@ -249,26 +278,6 @@ export const FormAddEvent = ({ onSuccess, onFailure, onClose }: Props) => {
     </form>
   );
 };
-
-const addIcon = (
-  <svg
-    fill="#000000"
-    viewBox="0 0 32 32"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-    <g
-      id="SVGRepo_tracerCarrier"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-    ></g>
-    <g id="SVGRepo_iconCarrier">
-      {" "}
-      <path d="M16 0c-8.836 0-16 7.163-16 16s7.163 16 16 16c8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 30.032c-7.72 0-14-6.312-14-14.032s6.28-14 14-14 14 6.28 14 14-6.28 14.032-14 14.032zM23 15h-6v-6c0-0.552-0.448-1-1-1s-1 0.448-1 1v6h-6c-0.552 0-1 0.448-1 1s0.448 1 1 1h6v6c0 0.552 0.448 1 1 1s1-0.448 1-1v-6h6c0.552 0 1-0.448 1-1s-0.448-1-1-1z"></path>{" "}
-    </g>
-  </svg>
-);
 
 const deleteIcon = (
   <svg

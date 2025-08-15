@@ -7,9 +7,10 @@ import { Preloader } from "../../../shared/preloader/preloader";
 import type { ModalTypes } from "../../../utils/types";
 import styles from "./admin-events.module.scss";
 import { Modal } from "../../../shared/modal-ui/modal-ui";
-import { FormDeleteEvent } from "./components/delete-event-form/delete-event-form";
-import { FormEditEvent } from "./components/edit-event-form/edit-event-form";
-import { FormAddEvent } from "./components/add-event-form/add-event-form";
+import { FormDeleteEvent } from "./components/form-delete-event/form-delete-event";
+import { FormEditEvent } from "./components/form-edit-event/form-edit-event";
+import { FormAddEvent } from "./components/form-add-event/form-add-event";
+import { ModalPreloader } from "../../../shared/modal-preloader/modal-preloader";
 
 const modalConfig: Partial<
   Record<
@@ -45,15 +46,17 @@ const modalConfig: Partial<
       onClose={onClose!}
     />
   ),
-  editConfirmation: () => <h2>This Member has been successfully edited!</h2>,
-  addConfirmation: () => <h2>New Member has been successfully added!</h2>,
-  deleteConfirmation: () => <h2>This Member has been successfully deleted!</h2>,
+  editConfirmation: () => <h2>This Event has been successfully edited!</h2>,
+  addConfirmation: () => <h2>New Event has been successfully added!</h2>,
+  deleteConfirmation: () => <h2>This Event has been successfully deleted!</h2>,
 
   error: () => <h2>Something went wrong... Please try again later!</h2>,
+  waiting: () => <ModalPreloader />,
 };
 
 export const AdminEvents = () => {
-  const { events, fetchEvents, isLoading } = useEvents();
+  const { events, fetchEvents, isLoading, editEvent } =
+    useEvents();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypes | null>(null);
@@ -71,9 +74,26 @@ export const AdminEvents = () => {
     setIsOpen(false);
   };
 
+  const handleArchieveEvent = async (id: string) => {
+    const eventToArchieve = events.find((e) => e.id === id);
+
+    if (!eventToArchieve) return;
+    const updatedEvent = { ...eventToArchieve, archieved: true };
+
+    try {
+      await editEvent(updatedEvent);
+      handleOpenModal("editConfirmation");
+    } catch (err) {
+      console.log(err);
+      handleOpenModal("error");
+    }
+  };
+
   useEffect(() => {
     fetchEvents();
   }, []);
+
+  console.log(events);
 
   return (
     <LayoutAdmin>
@@ -93,14 +113,22 @@ export const AdminEvents = () => {
                       type="button"
                       onClick={() => handleOpenModal("edit", e.id)}
                     >
-                      Edit Member
+                      Edit Event
                     </ButtonUI>
                     <ButtonUI
                       type="button"
                       onClick={() => handleOpenModal("delete", e.id)}
                     >
-                      Delete Member
+                      Delete Event
                     </ButtonUI>
+                    {!e.archieved && (
+                      <ButtonUI
+                        type="button"
+                        onClick={() => handleArchieveEvent(e.id!)}
+                      >
+                        Archieve
+                      </ButtonUI>
+                    )}
                   </div>
                 </div>
               ))

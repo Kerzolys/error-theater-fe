@@ -22,6 +22,7 @@ export const useEventForm = (eventId?: string) => {
     date: false,
     time: false,
     location: false,
+    name: false,
     description: false,
   });
 
@@ -32,15 +33,18 @@ export const useEventForm = (eventId?: string) => {
   useEffect(() => {
     if (eventToEdit) {
       const convertImage = async () => {
-        const photoFile = await urlToFile(
-          eventToEdit.image,
-          exportFileName(eventToEdit.image)
-        );
+        let photoFile: File | null = null;
+        if (eventToEdit.image) {
+          photoFile = await urlToFile(
+            eventToEdit.image,
+            exportFileName(eventToEdit.image)
+          );
+        }
 
         setValues({
           date: eventToEdit.date || "",
           time: eventToEdit.time || "",
-          location: eventToEdit.time || "",
+          location: eventToEdit.location || "",
           name: eventToEdit.name || "",
           description: eventToEdit.description || "",
           link: eventToEdit.link || "",

@@ -13,6 +13,7 @@ import type { TMemberFormErrors } from "../../types";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
 import { uploadToYandex } from "../../../../../services/api/uploadToYandex";
 import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
+import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
   onSuccess?: () => void;
@@ -21,7 +22,7 @@ type Props = {
 };
 
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => <h2>Please wait...</h2>,
+  waiting: () => <ModalPreloader />,
 };
 
 export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {

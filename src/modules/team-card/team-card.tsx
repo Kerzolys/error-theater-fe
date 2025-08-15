@@ -6,7 +6,6 @@ type Props = {
 };
 
 export const TeamCard = ({ data }: Props) => {
-  console.log(data);
   return (
     <div className={styles.container}>
       <div className={styles.container__photo}>
@@ -23,10 +22,10 @@ export const TeamCard = ({ data }: Props) => {
         <div className={styles.line}></div>
         {data.contacts.length > 0 ? (
           <div className={styles.container__info__contacts}>
-            {data.contacts.map((c) => (
+            {data.contacts.map((c, index) => (
               <p
                 className={styles.container__info__contacts__contact}
-                key={c.id}
+                key={index}
               >
                 <span
                   className={styles.container__info__contacts__contact__type}

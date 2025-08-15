@@ -10,17 +10,17 @@ import { AdminProjects } from "./pages/admin/admin-projects/admin-projects";
 import { useEvents, useMembers, useProjects } from "./services/zustand/store";
 import { useEffect } from "react";
 import { AdminTeam } from "./pages/admin/admin-team/admin-team";
+import { AdminEvents } from "./pages/admin/admin-events/admin-events";
 
 function App() {
   const { fetchProjects } = useProjects();
   const { fetchMembers } = useMembers();
   const { fetchEvents } = useEvents();
 
-
   useEffect(() => {
     fetchProjects();
   }, []);
-  
+
   useEffect(() => {
     fetchMembers();
   }, []);
@@ -40,6 +40,7 @@ function App() {
         <Route path="/admin" element={<AdminPage />} />
         <Route path="/admin/projects" element={<AdminProjects />} />
         <Route path="/admin/team_members" element={<AdminTeam />} />
+        <Route path="/admin/events" element={<AdminEvents />} />
       </Routes>
     </>
   );

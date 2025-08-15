@@ -10,7 +10,7 @@ import { Modal } from "../../../../../shared/modal-ui/modal-ui";
 import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
 import { uploadToYandex } from "../../../../../services/api/uploadToYandex";
 import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
-import { Preloader } from "../../../../../shared/preloader/preloader";
+import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
   id: string;
@@ -19,10 +19,7 @@ type Props = {
   onClose: () => void;
 };
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () =>  <>
-        <h2>Please wait...</h2>
-        <Preloader />
-      </>,
+  waiting: () => <ModalPreloader />,
 };
 
 export const FormEditMember = ({

@@ -6,6 +6,7 @@ import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
 import type { ModalTypes } from "../../../../../utils/types";
 import { useEffect, useState } from "react";
+import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
   id: string;
@@ -15,7 +16,7 @@ type Props = {
 };
 
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => <h2>Please wait...</h2>,
+  waiting: () => <ModalPreloader />,
 };
 
 export const FormDeleteProject = ({

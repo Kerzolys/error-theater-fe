@@ -5,7 +5,7 @@ import type { ModalTypes } from "../../../../../utils/types";
 import { useMembersForm } from "../../hooks/useMemberForm";
 import styles from "./form-delete-member.module.scss";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
-import { Preloader } from "../../../../../shared/preloader/preloader";
+import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
   id: string;
@@ -15,12 +15,7 @@ type Props = {
 };
 
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => (
-    <>
-      <h2>Please wait...</h2>
-      <Preloader />
-    </>
-  ),
+   waiting: () => <ModalPreloader />,
 };
 
 export const FormDeleteMember = ({

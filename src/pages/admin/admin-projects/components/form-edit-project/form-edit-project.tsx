@@ -9,6 +9,7 @@ import { useProjectForm } from "../../hooks/useProjectForm";
 import styles from "./form-edit-project.module.scss";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
 import { convertNameToYandex } from "../../../../../features/hooks/convertNameToYandex";
+import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
   id: string;
@@ -18,7 +19,7 @@ type Props = {
 };
 
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-  waiting: () => <h2>Please wait...</h2>,
+  waiting: () => <ModalPreloader />,
 };
 
 export const FormEditProject = ({
