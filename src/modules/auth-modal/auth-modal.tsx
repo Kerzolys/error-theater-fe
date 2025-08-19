@@ -83,7 +83,7 @@ export const AuthModal = ({ isLogin }: Props) => {
 
   return (
     <form onSubmit={handleSubmit} className={styles.form}>
-      <h2>{isLogin ? "Log in" : "Sign in"}</h2>
+      <h2>{isLogin ? "Log in" : "Sign up"}</h2>
       <InputUI
         title="Email"
         isError={(errors.email && !values.email) || errors.email || !!apiError}
