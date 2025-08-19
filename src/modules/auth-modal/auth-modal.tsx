@@ -8,13 +8,14 @@ import { registerUserApi } from "../../services/api/auth-api";
 import { ButtonUI } from "../../shared/button-ui/button-ui";
 import { authErrors } from "../../utils/errors";
 import { useAuth } from "../../services/zustand/store";
+import { Preloader } from "../../shared/preloader/preloader";
 
 type Props = {
   isLogin: boolean;
 };
 
 export const AuthModal = ({ isLogin }: Props) => {
-  const { login } = useAuth();
+  const { login, isLoading } = useAuth();
   const [values, setValues] = useState<{ email: string; password: string }>({
     email: "",
     password: "",
@@ -40,7 +41,7 @@ export const AuthModal = ({ isLogin }: Props) => {
       }));
     }
 
-    if (name === "password") {
+    if (name === "password" && !isLogin) {
       setErrors((prev) => ({
         ...prev,
         password: value !== "" && !isValidPassword(value),
@@ -53,8 +54,9 @@ export const AuthModal = ({ isLogin }: Props) => {
 
     const newErrors = {
       email: values.email.trim() === "" || !isValidEmail(values.email),
-      password:
-        values.password.trim() === "" || !isValidPassword(values.password),
+      password: !isLogin
+        ? values.password.trim() === "" || !isValidPassword(values.password)
+        : values.password.trim() === "",
     };
 
     setErrors(newErrors);
@@ -72,10 +74,10 @@ export const AuthModal = ({ isLogin }: Props) => {
       setErrors({ email: false, password: false });
       setApiError("");
     } catch (err: any) {
+      console.log(err.message);
       const message =
         authErrors[err.message as keyof typeof authErrors] || "Unknown error";
       setApiError(message);
-      console.log(err.message);
     }
   };
 
@@ -101,8 +103,10 @@ export const AuthModal = ({ isLogin }: Props) => {
         title="Password"
         isError={(errors.password && !values.password) || errors.password}
         errorText={
-          values.email !== ""
-            ? "8+ chars, uppercase, lowercase, number, special character"
+          !isLogin
+            ? values.email !== ""
+              ? "8+ chars, uppercase, lowercase, number, special character"
+              : "Field is required!"
             : "Field is required!"
         }
       >
@@ -113,7 +117,11 @@ export const AuthModal = ({ isLogin }: Props) => {
           onChange={handleChange}
         />
       </InputUI>
-      <ButtonUI type="submit">{isLogin ? "Log In" : "Sign Up"}</ButtonUI>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <ButtonUI type="submit">{isLogin ? "Log In" : "Sign Up"}</ButtonUI>
+      )}
     </form>
   );
 };

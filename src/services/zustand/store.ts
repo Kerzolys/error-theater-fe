@@ -48,6 +48,7 @@ export const useAuth = create<AuthState>((set) => ({
       }
     } catch (err: any) {
       set({ isLoading: false, error: err.message });
+      throw err;
     }
   },
   logout: async () => {

@@ -50,39 +50,43 @@ export const AdminPage = () => {
     restoreSession();
   }, []);
 
-  if (isLoading) return <Preloader />;
+  // if (isLoading) return <Preloader />;
 
   if (!isAuthenticated) {
     return (
-      <>
-        <Modal isOpen={true} onClose={handleClose}>
-          <AuthModal isLogin />
-        </Modal>
-      </>
+      <Modal isOpen={true} onClose={handleClose}>
+        <AuthModal isLogin />
+      </Modal>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <nav className={styles.container__navMenu}>
-        {adminMenuItems.map((i) => (
-          <NavMenuItemUI
-            href={i.href}
-            title={i.title}
-            isActive={i.isActive}
-            key={i.id}
-          />
-        ))}
-        <ButtonUI type="button" onClick={handleOpen}>
-          Register new user
-        </ButtonUI>
-        <ButtonUI type="button" onClick={logout}>
-          Logout
-        </ButtonUI>
-      </nav>
-      <Modal isOpen={isOpen} onClose={handleClose}>
-        <AuthModal key={isOpen ? "open" : "closed"} isLogin={false} />
-      </Modal>
-    </div>
+    <>
+      {isLoading ? (
+        <Preloader />
+      ) : (
+        <div className={styles.container}>
+          <nav className={styles.container__navMenu}>
+            {adminMenuItems.map((i) => (
+              <NavMenuItemUI
+                href={i.href}
+                title={i.title}
+                isActive={i.isActive}
+                key={i.id}
+              />
+            ))}
+            <ButtonUI type="button" onClick={handleOpen}>
+              Register new user
+            </ButtonUI>
+            <ButtonUI type="button" onClick={logout}>
+              Logout
+            </ButtonUI>
+          </nav>
+          <Modal isOpen={isOpen} onClose={handleClose}>
+            <AuthModal key={isOpen ? "open" : "closed"} isLogin={false} />
+          </Modal>
+        </div>
+      )}
+    </>
   );
 };
