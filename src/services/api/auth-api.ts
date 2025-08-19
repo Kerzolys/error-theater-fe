@@ -17,9 +17,8 @@ export const registerUserApi = async (
       password
     );
     return userCredential;
-  } catch (err) {
-    console.error("Ошибка регистрации", err);
-    return null;
+  } catch (err: any) {
+    throw new Error(err.message || "Unknown error");
   }
 };
 
@@ -34,9 +33,8 @@ export const loginUserApi = async (
       password
     );
     return userCredential;
-  } catch (err) {
-    console.error("Ошибка регистрации", err);
-    return null;
+  } catch (err: any) {
+    throw new Error(err.message || "Unknown error");
   }
 };
 

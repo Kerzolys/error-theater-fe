@@ -6,10 +6,16 @@ import {
 import styles from "./admin.module.scss";
 import { ButtonUI } from "../../shared/button-ui/button-ui";
 import { useAuth } from "../../services/zustand/store";
+import { AuthModal } from "../../modules/auth-modal/auth-modal";
+import { useEffect, useState } from "react";
+import { Modal } from "../../shared/modal-ui/modal-ui";
+import { Preloader } from "../../shared/preloader/preloader";
 
 export const AdminPage = () => {
-  const { logout } = useAuth();
+  const { isAuthenticated, restoreSession, isLoading, logout } = useAuth();
   const location = useLocation();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const adminMenuItems: NavMenuItemProps[] = [
     {
       id: 1,
@@ -37,9 +43,24 @@ export const AdminPage = () => {
     },
   ];
 
-  const handleOpenRegister = () => {
-    console.log("fuck");
-  };
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
+
+  useEffect(() => {
+    restoreSession();
+  }, []);
+
+  if (isLoading) return <Preloader />;
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Modal isOpen={true} onClose={handleClose}>
+          <AuthModal isLogin />
+        </Modal>
+      </>
+    );
+  }
 
   return (
     <div className={styles.container}>
@@ -52,13 +73,16 @@ export const AdminPage = () => {
             key={i.id}
           />
         ))}
-        <ButtonUI type="button" onClick={handleOpenRegister}>
+        <ButtonUI type="button" onClick={handleOpen}>
           Register new user
         </ButtonUI>
         <ButtonUI type="button" onClick={logout}>
           Logout
         </ButtonUI>
       </nav>
+      <Modal isOpen={isOpen} onClose={handleClose}>
+        <AuthModal key={isOpen ? "open" : "closed"} isLogin={false} />
+      </Modal>
     </div>
   );
 };

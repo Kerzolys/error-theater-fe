@@ -7,15 +7,23 @@ import { CalendarPage } from "./pages/calendar/calendar";
 import { ProjectPage } from "./modules/project-page/project-page";
 import { AdminPage } from "./pages/admin/admin";
 import { AdminProjects } from "./pages/admin/admin-projects/admin-projects";
-import { useEvents, useMembers, useProjects } from "./services/zustand/store";
+import {
+  useAuth,
+  useEvents,
+  useMembers,
+  useProjects,
+} from "./services/zustand/store";
 import { useEffect } from "react";
 import { AdminTeam } from "./pages/admin/admin-team/admin-team";
 import { AdminEvents } from "./pages/admin/admin-events/admin-events";
+import ProtectedRoute from "./modules/protected-route/protected-route";
+import { Preloader } from "./shared/preloader/preloader";
 
 function App() {
   const { fetchProjects } = useProjects();
   const { fetchMembers } = useMembers();
   const { fetchEvents } = useEvents();
+  const { isSessionRestored, restoreSession } = useAuth();
 
   useEffect(() => {
     fetchProjects();
@@ -29,6 +37,10 @@ function App() {
     fetchEvents();
   }, []);
 
+  useEffect(() => {
+    restoreSession();
+  }, []);
+
   return (
     <>
       <Routes>
@@ -38,9 +50,11 @@ function App() {
         <Route path="/theater" element={<TheaterPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/admin" element={<AdminPage />} />
-        <Route path="/admin/projects" element={<AdminProjects />} />
-        <Route path="/admin/team_members" element={<AdminTeam />} />
-        <Route path="/admin/events" element={<AdminEvents />} />
+        <Route element={isSessionRestored ? <ProtectedRoute /> : <Preloader />}>
+          <Route path="/admin/projects" element={<AdminProjects />} />
+          <Route path="/admin/team_members" element={<AdminTeam />} />
+          <Route path="/admin/events" element={<AdminEvents />} />
+        </Route>
       </Routes>
     </>
   );

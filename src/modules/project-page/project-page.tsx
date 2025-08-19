@@ -21,8 +21,6 @@ export const ProjectPage = () => {
     fetchProjects();
   }, []);
 
-  console.log(projects)
-
   if (isLoading) return <Preloader />;
 
   return (

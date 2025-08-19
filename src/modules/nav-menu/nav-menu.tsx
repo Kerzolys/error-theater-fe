@@ -49,8 +49,8 @@ export const NavMenu = ({ horizontalMenu }: { horizontalMenu: boolean }) => {
     },
     {
       id: 4,
-      href: "",
-      title: "Info",
+      href: "/#info",
+      title: "About",
       isActive: location.pathname === "/" && infoInView,
       onClick: handleInfoClick,
     },

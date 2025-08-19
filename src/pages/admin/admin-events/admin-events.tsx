@@ -93,8 +93,6 @@ export const AdminEvents = () => {
     fetchEvents();
   }, []);
 
-  console.log(events);
-
   return (
     <LayoutAdmin>
       {!isLoading ? (

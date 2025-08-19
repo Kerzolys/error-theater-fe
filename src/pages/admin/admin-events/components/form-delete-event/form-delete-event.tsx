@@ -33,7 +33,6 @@ export const FormDeleteEvent = ({
     evt.preventDefault();
     try {
       const deletingEvent = events.find((e) => e.id === id);
-    console.log(deletingEvent)
 
       if (deletingEvent?.image) {
         setIsLoading(true);
