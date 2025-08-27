@@ -1,13 +1,22 @@
 .container {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   background-color: #fff;
   gap: var(--padding-s);
   padding: var(--padding-l);
   @media screen and (max-width: 1023px) {
-    flex-direction: column-reverse;
     padding-inline: var(--padding-s);
+  }
+
+  &__infoBlock {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--padding-s);
+
+    @media screen and (max-width: 1023px) {
+      flex-direction: column-reverse;
+    }
   }
 
   &__info {
@@ -33,11 +42,26 @@
       display: block;
     }
   }
+
+  &__reviewsBlock {
+    display: flex;
+    flex-direction: column;
+    gap: var(--font-size-m);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-100px);
+    transition: opacity 1s ease, transform 1s ease;
+    &_visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(0);
+    }
+  }
 }
 
 .line {
-    inline-size: 100%;
-    block-size: 1px;
-    background-color: var(--font-main);
-    margin-block: var(--padding-s);
+  inline-size: 100%;
+  block-size: 1px;
+  background-color: var(--font-main);
+  margin-block: var(--padding-s);
 }

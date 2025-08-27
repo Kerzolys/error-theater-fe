@@ -38,7 +38,7 @@ export const NavMenu = ({ horizontalMenu }: { horizontalMenu: boolean }) => {
     {
       id: 2,
       href: "/theater",
-      title: "Theater",
+      title: "Team",
       isActive: location.pathname === "/theater",
     },
     {

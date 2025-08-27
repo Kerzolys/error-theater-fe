@@ -34,12 +34,18 @@ export const HeaderAdmin = () => {
     },
     {
       id: 5,
+      title: "Reviews",
+      href: "/admin/reviews",
+      isActive: location.pathname === "/admin/reviews",
+    },
+    {
+      id: 6,
       title: "Home",
       href: "/",
       isActive: location.pathname === "/",
     },
     {
-      id: 6,
+      id: 7,
       title: "Admin",
       href: "/admin",
       isActive: location.pathname === "/admin",

@@ -11,13 +11,12 @@ export const HomePage = () => {
     if (location.state?.scrollToInfo) {
       const el = document.getElementById("info");
       if (el) {
-        // скроллим к блоку
         el.scrollIntoView({ behavior: "smooth" });
       }
-      // очищаем state, чтобы при последующих переходах случайно не скроллило
       window.history.replaceState({}, document.title);
     }
   }, [location]);
+
   return (
     <Layout>
       <HomeHero />

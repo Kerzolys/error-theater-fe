@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { deleteFromYandex } from "../../../../../services/api/deleteFromYandex";
 import { ButtonUI } from "../../../../../shared/button-ui/button-ui";
-import type { ModalTypes } from "../../../../../utils/types";
-import { useMembersForm } from "../../hooks/useMemberForm";
-import styles from "./form-delete-member.module.scss";
 import { Modal } from "../../../../../shared/modal-ui/modal-ui";
+import styles from "./form-delete-review.module.scss";
+import type { ModalTypes } from "../../../../../utils/types";
+import { useReviewForm } from "../../hooks/useReviewForm";
 import { ModalPreloader } from "../../../../../shared/modal-preloader/modal-preloader";
 
 type Props = {
@@ -15,16 +14,16 @@ type Props = {
 };
 
 const modalConfig: Partial<Record<ModalTypes, () => React.ReactNode>> = {
-   waiting: () => <ModalPreloader />,
+  waiting: () => <ModalPreloader />,
 };
 
-export const FormDeleteMember = ({
+export const FormDeleteReview = ({
   id,
   onSuccess,
   onFailure,
   onClose,
 }: Props) => {
-  const { deleteMember, isLoading, setIsLoading, members } = useMembersForm(id);
+  const { deleteReview, isLoading, reviews } = useReviewForm(id);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalTypes | null>(null);
 
@@ -32,17 +31,10 @@ export const FormDeleteMember = ({
     evt.preventDefault();
 
     try {
-      const deleteingMember = members.find((m) => m.id === id);
+      const deletingReview = reviews.find((r) => r.id === id);
+      if (!deletingReview) return;
 
-      if (!deleteingMember?.photo) return;
-
-      if (deleteingMember.photo) {
-        setIsLoading(true);
-        await deleteFromYandex(deleteingMember.photo);
-        setIsLoading(false);
-      }
-
-      await deleteMember(id);
+      await deleteReview(id);
       onSuccess?.();
     } catch (err) {
       console.log(err);
@@ -71,7 +63,7 @@ export const FormDeleteMember = ({
     <form onSubmit={handleSubmit} className={styles.form}>
       <h2>Are you sure?</h2>
       <div className={styles.form__buttons}>
-        <ButtonUI type="submit">Delete Member</ButtonUI>
+        <ButtonUI type="submit">Delete Review</ButtonUI>
         <ButtonUI type="button" onClick={onClose}>
           Cancel
         </ButtonUI>

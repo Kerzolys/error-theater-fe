@@ -1,0 +1,21 @@
+.container {
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  margin-block: calc(var(--header-height) + var(--padding-l)) var(--padding-l);
+  padding: var(--padding-l) var(--padding-m);
+   &__reviews {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--padding-m);
+    &__review {
+        display: flex;
+        flex-direction: column;
+        gap: var(--padding-xs);
+        &__buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+  }
+}

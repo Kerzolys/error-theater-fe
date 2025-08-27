@@ -1,0 +1,10 @@
+.form {
+  & h2 {
+    text-align: center;
+    margin-block: var(--padding-s);
+  }
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+}

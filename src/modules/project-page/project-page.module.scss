@@ -1,7 +1,7 @@
 .container {
   background-color: #fff;
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-template-columns: auto 500px;
   grid-template-rows: repeat(4, auto);
   padding: var(--padding-l) var(--padding-s);
   row-gap: var(--padding-m);
@@ -38,6 +38,10 @@
     grid-row: 2/3;
     grid-column: 2/3;
     align-self: center;
+
+    @media screen and (max-width: 1023px) {
+      align-self: unset;
+    }
   }
   &__videoSlider {
     grid-row: 4/5;

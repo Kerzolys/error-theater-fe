@@ -1,0 +1,13 @@
+.form {
+  max-inline-size: 800px;
+  inline-size: 80vw;
+  display: flex;
+  flex-direction: column;
+  gap: var(--padding-s);
+
+  &__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: var(--padding-s);
+  }
+}

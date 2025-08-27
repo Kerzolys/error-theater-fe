@@ -1,5 +1,11 @@
 import { create } from "zustand";
-import type { TEvent, TMember, TProject, TUser } from "../../utils/types";
+import type {
+  TEvent,
+  TMember,
+  TProject,
+  TReview,
+  TUser,
+} from "../../utils/types";
 import { loginUserApi, logoutUserApi, registerUserApi } from "../api/auth-api";
 import { auth } from "../firebase/firebase";
 import { fetchProjectsApi } from "../api/projects-api";
@@ -7,6 +13,7 @@ import { fetchMembersApi } from "../api/members-api";
 import { addItemApi, deleteItemApi, editItemApi } from "../api/firebase-api";
 import { fetchEventsApi } from "../api/events-api";
 import { getCache, setCache } from "../../features/hooks/cache";
+import { fetchReviewsApi } from "../api/reviews-api";
 
 type AuthState = {
   user: TUser | null;
@@ -357,9 +364,87 @@ export const useEvents = create<EventsState>((set) => ({
     try {
       await deleteItemApi("events", deletingEventId);
       set((state) => {
-        const updated = state.events.filter((m) => deletingEventId !== m.id);
+        const updated = state.events.filter((e) => deletingEventId !== e.id);
         setCache("events", updated, 1440);
         return { events: updated, isLoading: false };
+      });
+    } catch (err: any) {
+      set({ isLoading: false, error: err.message });
+    }
+  },
+}));
+
+type ReviewsState = {
+  reviews: TReview[] | [];
+  isLoading: boolean;
+  setIsLoading: (value: boolean) => void;
+  error: string | null;
+  fetchReviews: () => void;
+  addReview: (newReview: TReview) => void;
+  editReview: (editingReview: TReview) => void;
+  deleteReview: (deletingReviewId: string) => void;
+};
+
+export const useReviews = create<ReviewsState>((set) => ({
+  reviews: [],
+  isLoading: false,
+  setIsLoading: (value: boolean) => set({ isLoading: value }),
+  error: null,
+  fetchReviews: async () => {
+    set({ isLoading: true, error: null });
+    const cached = getCache<TReview[]>("reviews");
+    if (cached) {
+      set({ reviews: cached, isLoading: false });
+      return;
+    }
+    try {
+      const reviews = await fetchReviewsApi();
+      if (reviews) {
+        set({ reviews, isLoading: false });
+        setCache("reviews", reviews, 1440);
+      } else {
+        set({ error: "Error fetching reviews", isLoading: false });
+      }
+    } catch (err: any) {
+      set({ isLoading: false, error: err.message });
+    }
+  },
+  addReview: async (newReview: TReview) => {
+    set({ isLoading: true, error: null });
+    try {
+      const newReviewId = await addItemApi("reviews", newReview);
+      set((state) => {
+        const updated = [...state.reviews, { ...newReview, id: newReviewId }];
+        setCache("reviews", updated, 1440);
+        return { reviews: updated, isLoading: false };
+      });
+    } catch (err: any) {
+      set({ isLoading: false, error: err.message });
+    }
+  },
+  editReview: async (editingReview: TReview) => {
+    set({ isLoading: true, error: null });
+    try {
+      await editItemApi("reviews", editingReview);
+      set((state) => {
+        const updated = state.reviews.map((r) =>
+          r.id === editingReview.id ? editingReview : r
+        );
+        setCache("reviews", updated, 1440);
+        return { reviews: updated, isLoading: false };
+      });
+    } catch (err: any) {
+      set({ isLoading: false, error: err.message });
+    }
+  },
+  deleteReview: async (deletingReviewId: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      await deleteItemApi("reviews", deletingReviewId);
+      set((state) => {
+        const updated = state.reviews.filter((r) => deletingReviewId !== r.id);
+        setCache("reviews", updated, 1440);
+        return { reviews: updated, isLoading: false };
       });
     } catch (err: any) {
       set({ isLoading: false, error: err.message });

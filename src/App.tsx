@@ -18,6 +18,7 @@ import { AdminTeam } from "./pages/admin/admin-team/admin-team";
 import { AdminEvents } from "./pages/admin/admin-events/admin-events";
 import ProtectedRoute from "./modules/protected-route/protected-route";
 import { Preloader } from "./shared/preloader/preloader";
+import { AdminReviews } from "./pages/admin/admin-reviews/admin-reviews";
 
 function App() {
   const { fetchProjects } = useProjects();
@@ -54,6 +55,7 @@ function App() {
           <Route path="/admin/projects" element={<AdminProjects />} />
           <Route path="/admin/team_members" element={<AdminTeam />} />
           <Route path="/admin/events" element={<AdminEvents />} />
+          <Route path="/admin/reviews" element={<AdminReviews />} />
         </Route>
       </Routes>
     </>

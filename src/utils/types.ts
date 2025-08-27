@@ -37,17 +37,11 @@ export type TEvent = {
   image?: string;
 };
 
-// export type TImage = {
-//   id?: string;
-//   link: string;
-//   title?: string;
-// };
-
-// export type TVideo = {
-//   id?: string;
-//   link: string;
-//   name?: string;
-// };
+export type TReview = {
+  id?: string;
+  text: string;
+  source: string;
+};
 
 export type TContact = {
   id?: string;

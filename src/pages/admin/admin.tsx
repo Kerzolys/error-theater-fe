@@ -37,6 +37,12 @@ export const AdminPage = () => {
     },
     {
       id: 4,
+      title: "Reviews",
+      href: "./reviews",
+      isActive: location.pathname === "./reviews",
+    },
+    {
+      id: 5,
       title: "Home",
       href: "/",
       isActive: location.pathname === "/",

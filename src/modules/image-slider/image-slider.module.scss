@@ -1,66 +1,56 @@
 .container {
   display: flex;
-  gap: var(--padding-xs);
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
+  gap: var(--padding-xs);
+
   &__arrowBackward,
   &__arrowForward {
     inline-size: 30px;
+    block-size: 30px;
     cursor: pointer;
     transition: transform 0.5s ease;
+    & svg {
+      display: block;
+    }
     &:hover {
-      transform: scale(1.2);
+      transform: scale(1.1);
     }
   }
   &__slider {
-    position: relative;
-    overflow: hidden;
-    inline-size: fit-content;
-    max-inline-size: 500px;
+    inline-size: 100%;
     block-size: 400px;
+    max-inline-size: 500px;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     &__slide {
       position: absolute;
-      top: 0;
-      left: 0;
       visibility: hidden;
       opacity: 0;
+      top: 0;
       transition: opacity 1s ease;
-      cursor: pointer;
+      object-fit: contain;
       inline-size: fit-content;
-      max-inline-size: 100%;
       block-size: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
       &_active {
-        position: relative;
         visibility: visible;
         opacity: 1;
-      }
-      & img {
-        block-size: 100%;
-        inline-size: auto;
-        object-fit: contain;
-        max-inline-size: 100%;
       }
     }
   }
 }
 
 .modal__container {
-  max-inline-size: 80vw;
-  max-block-size: 80vh;
   display: flex;
   align-items: center;
   gap: var(--padding-xs);
-  justify-content: center;
+  justify-content: space-between;
   overflow: hidden;
   & .container__slider {
     position: relative;
-    inline-size: fit-content;
+    inline-size: 100%;
     max-inline-size: 80vw;
     block-size: auto;
     max-block-size: 80vh;
