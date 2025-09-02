@@ -3,7 +3,7 @@
   display: grid;
   grid-template-columns: auto 500px;
   grid-template-rows: repeat(4, auto);
-  padding: var(--padding-l) var(--padding-s);
+  padding: var(--padding-l) var(--padding-l);
   row-gap: var(--padding-m);
   column-gap: var(--padding-m);
   box-shadow: var(--shadow);

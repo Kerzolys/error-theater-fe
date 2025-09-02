@@ -42,9 +42,11 @@ export const ProjectPage = () => {
           <ImageSlider data={projectData?.images ?? []} />
         </div>
         <div className={styles.line_large}></div>
-        <div className={styles.container__videoSlider}>
-          <VideoSlider data={projectData?.videos ?? []} />
-        </div>
+        {projectData && projectData?.videos.length > 0 && (
+          <div className={styles.container__videoSlider}>
+            <VideoSlider data={projectData?.videos ?? []} />
+          </div>
+        )}
       </div>
     </Layout>
   );

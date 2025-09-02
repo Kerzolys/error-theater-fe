@@ -14,10 +14,13 @@
     align-items: center;
     inline-size: 100%;
     block-size: 100%;
+    &:hover h2 {
+      backdrop-filter: contrast(0.5);
+    }
     & h2 {
       font-size: var(--font-size-xl);
       color: #fff;
+      transition: backdrop-filter 0.5s ease;
     }
   }
 }
-
