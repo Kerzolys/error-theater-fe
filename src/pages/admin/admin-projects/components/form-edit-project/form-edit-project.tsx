@@ -84,6 +84,7 @@ export const FormEditProject = ({
       mainImage: null,
       images: [],
       videos: [],
+      data: "",
     });
   };
 
@@ -102,7 +103,7 @@ export const FormEditProject = ({
 
     try {
       const initialProject = projects.find((p) => p.id === id);
-      
+
       if (!values.mainImage || values.images.length === 0) return;
       if (!initialProject) return;
 
@@ -115,7 +116,7 @@ export const FormEditProject = ({
       let newMainImageLink = initialProject?.mainImage;
       if (mainImageChanged) {
         setIsLoading(true);
-        await deleteFromYandex(initialProject?.mainImage!);
+        await deleteFromYandex(initialProject?.mainImage ?? "");
         newMainImageLink = await uploadToYandex(
           `project_${convertNameToYandex(values.name)}`,
           values.mainImage
@@ -146,6 +147,7 @@ export const FormEditProject = ({
         mainImage: newMainImageLink,
         images: newImagesLinks,
         videos: values.videos,
+        data: values.data,
       };
 
       await editProject(updatedProject);
@@ -197,6 +199,14 @@ export const FormEditProject = ({
           value={values.description}
           onChange={handleChange}
         ></textarea>
+      </InputUI>
+      <InputUI title="Year of the Project">
+        <input
+          type="text"
+          name="data"
+          value={values.data}
+          onChange={handleChange}
+        ></input>
       </InputUI>
       <InputUI
         title="Main Image"

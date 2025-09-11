@@ -20,6 +20,7 @@ export const useProjectForm = (projectId?: string) => {
     mainImage: null,
     images: [],
     videos: [],
+    data: "",
   });
 
   const [errors, setErrors] = useState<TProjectErrors>({
@@ -35,7 +36,6 @@ export const useProjectForm = (projectId?: string) => {
   useEffect(() => {
     if (projectToEdit) {
       const convertImages = async () => {
-        
         const imagesFiles = await Promise.all(
           (projectToEdit.images || []).map((url) =>
             urlToFile(url, exportFileName(url))
@@ -53,6 +53,7 @@ export const useProjectForm = (projectId?: string) => {
           mainImage: mainImageFile,
           images: imagesFiles,
           videos: projectToEdit.videos || [],
+          data: projectToEdit.data || "",
         });
       };
 

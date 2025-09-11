@@ -14,6 +14,7 @@ export type TProject = {
   description: string;
   name: string;
   mainImage: string;
+  data?: string;
 };
 
 export type TMember = {

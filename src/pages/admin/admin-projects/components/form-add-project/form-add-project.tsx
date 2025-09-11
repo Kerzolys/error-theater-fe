@@ -112,6 +112,7 @@ export const FormAddProject = ({ onSuccess, onFailure, onClose }: Props) => {
         mainImage: mainImageLink!,
         images: imagesLinks || [],
         videos: values.videos,
+        data: values.data
       };
 
       await addProject(valuesToSubmit);
@@ -129,6 +130,7 @@ export const FormAddProject = ({ onSuccess, onFailure, onClose }: Props) => {
       mainImage: null,
       images: [],
       videos: [],
+      data: "",
     });
   };
 
@@ -173,6 +175,14 @@ export const FormAddProject = ({ onSuccess, onFailure, onClose }: Props) => {
           value={values.description}
           onChange={handleChange}
         ></textarea>
+      </InputUI>
+      <InputUI title="Year of the Project">
+        <input
+          type="text"
+          name="data"
+          value={values.data}
+          onChange={handleChange}
+        ></input>
       </InputUI>
       <InputUI
         title="Main Image"

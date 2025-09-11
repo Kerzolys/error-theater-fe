@@ -5,6 +5,7 @@ export type TProjectForm = {
   description: string;
   name: string;
   mainImage: File | null;
+  data: string;
 };
 
 export type TProjectErrors = {
