@@ -46,6 +46,7 @@
 
 .modal__event {
   display: flex;
+  flex-direction: column;
   gap: var(--padding-m);
   align-items: center;
   max-inline-size: 80vw;
@@ -74,6 +75,7 @@
     }
     & p {
       color: var(--font-secondary);
+      white-space: pre-line;
     }
   }
 }
