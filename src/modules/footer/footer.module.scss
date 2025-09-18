@@ -1,10 +1,28 @@
 .container {
-    background-color: #fff;
-    padding: var(--padding-s);
-    box-shadow: var(--shadow);
-    &__infoBlock {
-        display: flex;
-        justify-content: space-between;
-        margin-block-end: var(--padding-s);
+  background-color: #fff;
+  padding: var(--padding-s);
+  box-shadow: var(--shadow);
+  // &__infoBlock {
+  //     display: flex;
+  //     justify-content: space-between;
+  //     margin-block-end: var(--padding-s);
+  // }
+  &__socialBlock {
+    display: flex;
+    gap: var(--padding-s);
+    align-items: center;
+    justify-content: center;
+    margin-block: var(--padding-m);
+    & a {
+      inline-size: 24px;
+      aspect-ratio: 1/1;
+      transition: transform 0.5s ease;
+      &:hover {
+        transform: scale(1.1);
+      }
+      & svg {
+        display: block;
+      }
     }
+  }
 }
