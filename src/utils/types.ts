@@ -24,6 +24,7 @@ export type TMember = {
   description: string;
   contacts: TContact[];
   photo: string;
+  order?: string;
 };
 
 export type TEvent = {

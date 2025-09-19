@@ -96,6 +96,7 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
       description: "",
       photo: null,
       contacts: [],
+      order: "",
     });
 
   const handelSubmit = async (evt: React.FormEvent) => {
@@ -131,6 +132,7 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
         description: values.description,
         photo: photoLink!,
         contacts: values.contacts || [],
+        order: values.order,
       };
 
       await addMember(newMember);
@@ -189,6 +191,14 @@ export const FormAddMember = ({ onSuccess, onFailure, onClose }: Props) => {
         <textarea
           value={values.description}
           name="description"
+          onChange={handleChange}
+        />
+      </InputUI>
+      <InputUI title="Order on web site">
+        <input
+          type="text"
+          name="order"
+          value={values.order}
           onChange={handleChange}
         />
       </InputUI>

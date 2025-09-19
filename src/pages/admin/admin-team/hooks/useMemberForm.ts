@@ -25,6 +25,7 @@ export const useMembersForm = (memberId?: string) => {
       },
     ],
     photo: null,
+    order: "",
   });
   const [errors, setErrors] = useState<TMemberFormErrors>({
     name: false,
@@ -50,6 +51,7 @@ export const useMembersForm = (memberId?: string) => {
           position: memberToEdit.position || "",
           photo: photoFile,
           contacts: memberToEdit.contacts || [],
+          order: memberToEdit.order || "",
         });
       };
       void convertImage();

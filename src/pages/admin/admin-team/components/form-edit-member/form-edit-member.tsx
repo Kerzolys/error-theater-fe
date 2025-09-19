@@ -99,6 +99,7 @@ export const FormEditMember = ({
       description: "",
       photo: null,
       contacts: [],
+      order: "",
     });
 
   const handelSubmit = async (evt: React.FormEvent) => {
@@ -139,6 +140,7 @@ export const FormEditMember = ({
         description: values.description,
         photo: newPhotoLink,
         contacts: values.contacts,
+        order: values.order,
       };
 
       await editMember(updatedMember);
@@ -197,6 +199,14 @@ export const FormEditMember = ({
         <textarea
           value={values.description}
           name="description"
+          onChange={handleChange}
+        />
+      </InputUI>
+      <InputUI title="Order on web site">
+        <input
+          type="text"
+          name="order"
+          value={values.order}
           onChange={handleChange}
         />
       </InputUI>

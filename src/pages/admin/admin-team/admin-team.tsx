@@ -85,25 +85,27 @@ export const AdminTeam = () => {
           </ButtonUI>
           <div className={styles.container__members}>
             {members.length > 0 ? (
-              members.map((m) => (
-                <div className={styles.container__members__member} key={m.id}>
-                  <TeamCard data={m} />
-                  <div className={styles.container__members__member__buttons}>
-                    <ButtonUI
-                      type="button"
-                      onClick={() => handleOpenModal("edit", m.id)}
-                    >
-                      Edit Member
-                    </ButtonUI>
-                    <ButtonUI
-                      type="button"
-                      onClick={() => handleOpenModal("delete", m.id)}
-                    >
-                      Delete Member
-                    </ButtonUI>
+              members
+                .sort((a, b) => Number(a.order) - Number(b.order))
+                .map((m) => (
+                  <div className={styles.container__members__member} key={m.id}>
+                    <TeamCard data={m} />
+                    <div className={styles.container__members__member__buttons}>
+                      <ButtonUI
+                        type="button"
+                        onClick={() => handleOpenModal("edit", m.id)}
+                      >
+                        Edit Member
+                      </ButtonUI>
+                      <ButtonUI
+                        type="button"
+                        onClick={() => handleOpenModal("delete", m.id)}
+                      >
+                        Delete Member
+                      </ButtonUI>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))
             ) : (
               <h2>There are no members yet!</h2>
             )}
